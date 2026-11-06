@@ -46,6 +46,8 @@ table{border-collapse:collapse;width:100%;font-size:14px}td{border-bottom:1px so
 .el.demo{width:min(11vw,17vh);height:100%;cursor:default;justify-content:space-between;pointer-events:none}.demo>*{flex:1;display:flex;align-items:center}.demo s{justify-content:flex-end}
 .demo .r1 b{font-size:min(2.6vw,4.4vh)}.demo .r1 u{font-size:min(1.2vw,2vh)}.demo .r1 i{font-size:min(2.5vw,4.2vh)}.demo .r2 em{font-size:min(1.2vw,2vh)}.demo s{font-size:min(1.2vw,2vh)}
 #lg{display:grid;grid-template-columns:repeat(4,auto);gap:.8vh .9vw;font-size:min(.9vw,1.5vh)}#lg div{display:flex;align-items:center;gap:.4vw;white-space:nowrap}#lg i{width:min(2vw,3vh);height:min(2vw,3vh);border-radius:4px;border:1px solid rgba(0,0,0,.25)}
+#help{width:100%;font-size:min(24px,3vh);padding:1.6vh 4px;border-radius:12px;border:2px solid #e0a040;background:#fff4dc;font-weight:700;color:#8a5a00}
+#tdoc{border:2px solid #e0a040;background:#fff9ec;border-radius:10px;padding:6px 12px;margin-bottom:8px;font-size:15px;line-height:1.6}#tdoc summary{font-weight:700;cursor:pointer;font-size:17px;color:#8a5a00}#tdoc ol{margin:6px 0 2px;padding-left:1.3em}
 </style></head><body>
 <header><h1>⚗️ 化學式組合：依化學式順序點元素</h1><span>成就 <b id="cnt">0</b>/<b id="tg">10</b> <button id="snd" title="音效">🔊</button> <button id="tb" title="老師">⚙</button></span></header>
 <div id="wrap"><div><div id="pt"></div><div id="list"></div></div><aside>
@@ -53,6 +55,7 @@ table{border-collapse:collapse;width:100%;font-size:14px}td{border-bottom:1px so
 <div class="card"><div id="seq"></div><div id="gb"></div>
 <div class="row"><button id="bl">（</button><button id="br">）</button></div>
 <div class="row"><button id="undo">退一步</button><button id="clr">清除</button><button id="ok">確認</button></div><div id="msg"></div><div id="nb"></div></div>
+<button id="help">【遊戲說明】</button>
 </aside></div>
 <div id="ovl"></div>
 <script>
@@ -93,6 +96,14 @@ $('snd').onclick=()=>{mute=!mute;$('snd').textContent=mute?'🔇':'🔊'};
 function confetti(x,y,n){const C=['#ff5252','#ffca28','#66bb6a','#42a5f5','#ab47bc','#ff7043'];for(let k=0;k<n;k++){const d=document.createElement('div');d.className='cf';d.style.cssText='left:'+x+'px;top:'+y+'px;background:'+C[k%6];document.body.appendChild(d);const dx=(Math.random()-.5)*500,dy=-Math.random()*260-40;d.animate([{transform:'translate(0,0) rotate(0)',opacity:1},{transform:'translate('+dx/2+'px,'+dy+'px) rotate(200deg)',opacity:1,offset:.45},{transform:'translate('+dx+'px,'+(dy+420)+'px) rotate(560deg)',opacity:0}],{duration:1400+Math.random()*600,easing:'ease-out'}).onfinish=()=>d.remove()}}
 const shake=()=>{const s=$('seq');s.classList.remove('shake');void s.offsetWidth;s.classList.add('shake')};
 const PR=['太棒了！新物質誕生！','答對了，你好厲害！','化學小天才！','完美！繼續加油！'];
+$('help').onclick=()=>{$('ovl').innerHTML=`<div class="ov" onclick="$('ovl').innerHTML=''"><div class="box" style="font-size:min(3.3vh,2.1vw);line-height:1.55;max-width:min(1100px,94vw)"><h2 style="margin:0 0 .3em;font-size:1.3em">🎮 遊戲說明</h2>
+<ol style="margin:0;padding-left:1.4em"><li><b>選題</b>：點下方一個物質格子。</li>
+<li><b>點元素</b>：依化學式由左到右點週期表的元素，幾個原子就點幾次。例如水 H<sub>2</sub>O，要點 H、H、O。</li>
+<li><b>原子團</b>：遇到括號，先按「（」，點出原子團裡的原子，再按「）」。做好的原子團會自動放進化學式，需要幾個，就再按粉紅色按鈕。例如 Ca(OH)<sub>2</sub>，先做一個 OH，再按一次粉紅色的 OH。</li>
+<li><b>確認</b>：按「確認」。答對，新物質會飛進格子；答錯可以再試。</li>
+<li><b>過關</b>：湊滿格子就過關。點已完成的格子，可以再看物質說明。</li></ol>
+<p style="margin:.5em 0 0"><b>小提醒</b>：點錯按「退一步」，想重來按「清除」。</p>
+<div style="text-align:center;margin-top:.6em"><button style="font-size:1em;padding:.3em 1.6em">知道了</button></div></div></div>`};
 function info(q){$('ovl').innerHTML=`<div class="ov" onclick="$('ovl').innerHTML=''"><div class="box" style="text-align:center"><div class="nb" style="animation:none;font-size:22px"><div class="f">${fh(q.items)}</div>${esc(q.n)}　分子量 ${mass(q.items)}</div><p style="font-size:22px">${esc(q.e||'')}</p><small>點一下關閉</small></div></div>`}
 function run(){const A=pool(),T=Math.max(1,D.n||10),sh=a=>a.sort(()=>Math.random()-.5);let L;
  if(D.range=='all'){const H=sh(A.filter(q=>q.d=='難')),Ez=sh(A.filter(q=>q.d!='難')),nh=Math.min(D.nh,H.length,T),ne=Math.min(T-nh,Ez.length);L=H.slice(0,nh).concat(Ez.slice(0,ne));L=L.concat(H.slice(nh).concat(Ez.slice(ne)).slice(0,T-L.length))}else L=sh(A).slice(0,T);
@@ -178,7 +189,14 @@ function importRows(rows){if(rows.length&&String(rows[0][0]||'').includes('中�
 let ed=-1;
 $('tb').onclick=()=>{$('ovl').innerHTML='<div class="ov"><div class="box"><h3>老師模式</h3><input id="pw" type="password" placeholder="密碼"><button id="pwo">進入</button><button id="pwx">取消</button><div id="pwm" class="bad"></div></div></div>';
  $('pwx').onclick=()=>{$('ovl').innerHTML=''};$('pwo').onclick=()=>{if($('pw').value=='scigjong6838')tpanel();else $('pwm').textContent='密碼錯誤'}};
-function tpanel(){ed=-1;$('ovl').innerHTML=`<div class="ov"><div class="box"><h3>老師模式</h3>出題範圍：<select id="rg"><option value="all">全部</option><option value="easy">只考基本（易）</option><option value="hard">只考進階（難）</option><option value="custom">只考自訂題</option></select>　每局<input id="nn" type="number" min="1" max="20" style="width:64px">題，其中進階<input id="nh" type="number" min="0" max="20" style="width:64px">題<small>（範圍選「全部」時依此分配）</small>
+function tpanel(){ed=-1;$('ovl').innerHTML=`<div class="ov"><div class="box"><h3>老師模式</h3><details id="tdoc"><summary>【題庫操作說明】（按一下展開）</summary><ol>
+<li><b>新增題目</b>：在「新增題目」填中文名稱、化學式（用一般數字，如 Al2(SO4)3）、選「易」或「難」，提示與說明可以空白（說明會在答對後顯示），按「新增」。輸入化學式時，下方會即時預覽化學式、分子量和學生要按的順序，紅字代表有錯。</li>
+<li><b>括號規則</b>：兩個以上相同的原子團才加括號，如 Ca(OH)2；只有一個原子團不加括號，如 NaOH。</li>
+<li><b>編輯、刪除</b>：在題庫列表按「編輯」，資料會回到上方欄位，改完按「更新」；按「刪除」就移除該題。</li>
+<li><b>原子團</b>：括號裡的原子團必須在「原子團」清單中。需要新的，在欄位輸入如 ClO3，按「新增原子團」。</li>
+<li><b>出題設定</b>：選出題範圍（全部、只考基本、只考進階、只考自訂題），並設定每局題數與其中的進階題數（範圍選「全部」時才依此分配）。改完要按最下方「完成並重新開始」才會套用。</li>
+<li><b>Excel 匯出匯入</b>：「匯出題庫（Excel）」會下載 化學式題庫.xlsx，欄位依序是中文名稱、化學式、難易（易/難）、提示、說明，第一列是標題。在 Excel 修改存檔後，按「匯入題庫」選檔案，跳出視窗時按「確定」＝取代現有題庫、按「取消」＝加到現有題庫後面。也可匯入 CSV。</li>
+<li><b>備份提醒</b>：題庫存在這台電腦的這個瀏覽器裡，換電腦或清除瀏覽器資料就會消失，請定期匯出備份。「還原預設題庫」會刪除所有自訂題。</li></ol></details>出題範圍：<select id="rg"><option value="all">全部</option><option value="easy">只考基本（易）</option><option value="hard">只考進階（難）</option><option value="custom">只考自訂題</option></select>　每局<input id="nn" type="number" min="1" max="20" style="width:64px">題，其中進階<input id="nh" type="number" min="0" max="20" style="width:64px">題<small>（範圍選「全部」時依此分配）</small>
 <hr><b id="ft">新增題目</b><br><input id="tn" placeholder="中文名稱，如 硫酸鋁"><input id="tf" placeholder="化學式，如 Al2(SO4)3"><select id="td"><option>易</option><option>難</option></select><input id="th" placeholder="提示（可空白）"><br><input id="te" placeholder="說明內容（答對後顯示，可空白）" style="width:90%"><button id="ta">新增</button><div id="tp" style="font-size:20px;min-height:28px"></div>
 <hr><b>題庫</b><table id="tl"></table><hr><b>原子團</b>（寫法如 SO4）：<span id="tg2"></span><br><input id="gi" placeholder="新增原子團，如 ClO3"><button id="ga">新增原子團</button><div id="gm" class="bad"></div>
 <hr><button id="ex">匯出題庫（Excel）</button><label><button onclick="this.nextSibling.click()">匯入題庫（Excel／CSV）</button><input type="file" id="im" accept=".xlsx,.csv,.json" style="display:none"></label><button id="rs">還原預設題庫</button><button id="tc" style="float:right;background:#2e7d32;color:#fff">完成並重新開始</button></div></div>`;
