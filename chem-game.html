@@ -1,0 +1,203 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>化學式組合遊戲</title><style>
+*{box-sizing:border-box}body{margin:0;font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;background:#f4f6fb;color:#1d2433;-webkit-user-select:none;user-select:none;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+header{display:flex;align-items:center;justify-content:space-between;padding:6px 14px;background:#27408b;color:#fff}h1{font-size:20px;margin:0}
+#tb{background:none;border:0;color:#fff;opacity:.35;font-size:20px}
+#wrap{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) clamp(250px,17vw,320px);gap:8px;padding:8px}#wrap>div{display:flex;flex-direction:column;min-height:0}aside{overflow-y:auto;min-height:0}
+
+#pt{flex:1;min-height:0;display:grid;grid-template-columns:repeat(18,minmax(0,1fr));grid-template-rows:repeat(7,minmax(0,1fr)) 1vh repeat(2,minmax(0,1fr));gap:2px}
+.el{border:1px solid rgba(0,0,0,.25);border-radius:5px;padding:1px 2px;display:flex;flex-direction:column;align-items:stretch;justify-content:center;line-height:1.1;font-family:inherit;color:#111;cursor:pointer;touch-action:manipulation;min-height:0;overflow:hidden}
+.el i,.el em{font-family:"DFKai-SB","標楷體","BiauKai","Kaiti TC",KaiTi,serif}.el b,.el u,.el s{font-family:Arial,"Helvetica Neue",Helvetica,sans-serif}
+.r1,.r2{display:flex;align-items:baseline;justify-content:space-between;min-width:0;white-space:nowrap}.rb{display:flex;align-items:baseline;gap:1px}
+.el u{text-decoration:none;font-size:min(.62vw,1vh)}.el b{font-size:calc(min(1.4vw,2.3vh)*var(--k,1.3));letter-spacing:-.03em;display:inline-block;transform:scaleX(.8);transform-origin:right bottom}.demo b{transform:none!important}.el i{font-style:normal;font-size:calc(min(1.3vw,2.2vh)*var(--k,1.3))}.el em{font-style:normal;font-size:min(.72vw,1.2vh);overflow:hidden;letter-spacing:-.04em}.el s{text-decoration:none;font-size:min(.8vw,1.3vh)}
+.el:active{transform:scale(.92);outline:3px solid #000}
+.c1{background:#58bdf0}.c2{background:#a9dcae}.c3{background:#fff3a0}.c4{background:#d3e68f}.c5{background:#e9895c}.c6{background:#ffc88f}.c7{background:#f6a1c7}.c8{background:#c4c4c8}.c9{background:#a8dcf5}.c10{background:#d8dcae}
+.ph{border:1px solid rgba(0,0,0,.25);font-size:min(1.2vw,2vh);display:flex;align-items:center;justify-content:center;color:#333;border-radius:5px}
+.card{background:#fff;border:1px solid #cfd6e4;border-radius:10px;padding:10px;margin-bottom:8px}
+#qn{font-size:min(22px,2.8vh)}#qn b{color:#27408b;font-size:min(28px,3.6vh)}.bd{font-size:13px;background:#eef;border-radius:8px;padding:1px 8px}
+#seq{min-height:8vh;font-size:min(34px,4.6vh);font-weight:700;padding:6px;border:2px dashed #9aa7c7;border-radius:8px;display:block;line-height:1.5}
+#seq .ph0{font-size:16px;color:#999;font-weight:400}sub{font-size:.6em;line-height:0;vertical-align:sub}.g{color:#c2185b}.op{color:#c2185b}
+button{font-family:inherit;touch-action:manipulation}
+.row{display:flex;gap:6px;margin-top:8px}.row button,#gb button{flex:1;font-size:min(22px,2.8vh);padding:1.3vh 4px;border-radius:10px;border:2px solid #9aa7c7;background:#eef2ff}
+#gb{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}#gb button{background:#e91e63;color:#fff;border-color:#ad1457;font-size:26px;font-weight:700}
+#ok{background:#2e7d32!important;color:#fff;border-color:#1b5e20!important}
+#msg{margin-top:8px;font-size:18px;min-height:26px}.good{color:#1b7a2b;font-weight:700}.bad{color:#c62828}
+#list{flex:none;height:15vh;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:6px;margin-top:6px}.tile{min-height:0;overflow:hidden;line-height:1.15;border:2px dashed #7b8ab8;border-radius:10px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:min(1.4vw,2.6vh);font-weight:700;cursor:pointer;text-align:center;padding:4px;touch-action:manipulation}.tile.sel{border:3px solid #e91e63;background:#fff0f6}.tile.done{border:2px solid #6b7785;background:#d5dbe4;cursor:pointer;font-size:min(.95vw,1.7vh);font-weight:400}.tile.done b{font-size:min(1.5vw,2.8vh)}.fly{position:fixed;z-index:8;margin:0;padding:14px 28px;max-width:420px}.nb .ex{font-size:16px;margin-top:6px;color:#e6f0ff}.t{border:2px solid #2e7d32;background:#e8f5e9;border-radius:8px;padding:4px 6px;font-size:15px}.t b{font-size:20px;display:block}.t.e{border:2px dashed #bbb;background:#fafafa;color:#bbb;text-align:center;line-height:48px}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:9}.box{background:#fff;border-radius:14px;padding:18px;max-width:760px;width:92%;max-height:92vh;overflow:auto}
+.box input,.box select{font-size:16px;padding:6px;margin:3px;border:1px solid #9aa7c7;border-radius:6px}.box button{font-size:15px;padding:6px 12px;margin:3px;border-radius:8px;border:1px solid #9aa7c7;background:#eef2ff}
+table{border-collapse:collapse;width:100%;font-size:14px}td{border-bottom:1px solid #ddd;padding:3px}
+@keyframes fin{from{opacity:0}to{opacity:1}}
+@keyframes glow{from{box-shadow:0 0 8px #0ff,0 0 16px #0ff}to{box-shadow:0 0 20px #f0f,0 0 40px #0ff}}
+#gb button.new{animation:fin 1s ease-out}
+.nb{margin-top:8px;text-align:center;padding:14px 8px;border-radius:14px;background:#5f6b7a;color:#fff;border:3px solid #e8edf5;font-size:18px;box-shadow:0 0 14px #9cf,0 0 30px #9cf;animation:fin 1.2s ease-out}
+.nb .f{font-size:46px;font-weight:700;text-shadow:0 0 8px #bdf}.nb .g{color:#ffd1e8}
+#snd{background:none;border:0;color:#fff;font-size:20px}
+.cf{position:fixed;width:10px;height:14px;z-index:20;pointer-events:none;border-radius:2px}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}.shake{animation:shake .4s}
+@keyframes bounce{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:scale(1)}}.tile.land{animation:bounce .5s}
+@keyframes hit{0%{transform:scale(1)}40%{transform:scale(1.25);filter:brightness(1.3)}100%{transform:scale(1)}}.el.hit{position:relative;z-index:3;animation:hit .3s}
+.mini{position:fixed;z-index:9;width:40px;height:40px;background:#fff;border:1px solid #888;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;box-shadow:0 2px 6px #0004;pointer-events:none}
+.fx{position:fixed;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,#fff,rgba(255,255,255,0) 70%);z-index:11;pointer-events:none}
+.bnr{position:fixed;z-index:12;pointer-events:none;text-align:center;font-weight:900;font-style:italic;line-height:1.05;white-space:nowrap;-webkit-text-stroke:2px #fff}.bnr>span{display:block;font-size:min(9vw,14vh)}.bnr small{display:block;font-size:min(4.5vw,7vh);font-style:normal}.bnr .g{color:inherit}
+.fl{position:fixed;z-index:13;font-weight:900;pointer-events:none;-webkit-text-stroke:1.5px #fff;text-shadow:0 0 8px currentColor;white-space:nowrap}
+#info{grid-row:1/4;grid-column:3/13;display:flex;align-items:center;justify-content:space-around;gap:.6vw;overflow:hidden;min-width:0}
+#demo{display:flex;align-items:stretch;height:min(12vh,9vw)}
+.lb{display:flex;flex-direction:column;font-size:min(.9vw,1.5vh);white-space:nowrap}.lb span{flex:1;display:flex;align-items:center}.lb.l span{justify-content:flex-end}
+.lb span::after,.lb span::before{content:'';width:1.5vw;border-top:2px solid #555}.lb.l span::before,.lb.r span::after{display:none}.lb.l span::after{margin-left:4px}.lb.r span::before{margin-right:4px}.lb span:empty::after,.lb span:empty::before{display:none}
+.el.demo{width:min(11vw,17vh);height:100%;cursor:default;justify-content:space-between;pointer-events:none}.demo>*{flex:1;display:flex;align-items:center}.demo s{justify-content:flex-end}
+.demo .r1 b{font-size:min(2.6vw,4.4vh)}.demo .r1 u{font-size:min(1.2vw,2vh)}.demo .r1 i{font-size:min(2.5vw,4.2vh)}.demo .r2 em{font-size:min(1.2vw,2vh)}.demo s{font-size:min(1.2vw,2vh)}
+#lg{display:grid;grid-template-columns:repeat(4,auto);gap:.8vh .9vw;font-size:min(.9vw,1.5vh)}#lg div{display:flex;align-items:center;gap:.4vw;white-space:nowrap}#lg i{width:min(2vw,3vh);height:min(2vw,3vh);border-radius:4px;border:1px solid rgba(0,0,0,.25)}
+</style></head><body>
+<header><h1>⚗️ 化學式組合：依化學式順序點元素</h1><span>成就 <b id="cnt">0</b>/<b id="tg">10</b> <button id="snd" title="音效">🔊</button> <button id="tb" title="老師">⚙</button></span></header>
+<div id="wrap"><div><div id="pt"></div><div id="list"></div></div><aside>
+<div class="card"><div id="qn"></div><button id="hintb">💡提示</button> <span id="hint"></span></div>
+<div class="card"><div id="seq"></div><div id="gb"></div>
+<div class="row"><button id="bl">（</button><button id="br">）</button></div>
+<div class="row"><button id="undo">退一步</button><button id="clr">清除</button><button id="ok">確認</button></div><div id="msg"></div><div id="nb"></div></div>
+</aside></div>
+<div id="ovl"></div>
+<script>
+const E="H氫1,He氦4,Li鋰7,Be鈹9,B硼11,C碳12,N氮14,O氧16,F氟19,Ne氖20,Na鈉23,Mg鎂24,Al鋁27,Si矽28,P磷31,S硫32,Cl氯35,Ar氬40,K鉀39,Ca鈣40,Sc鈧45,Ti鈦48,V釩51,Cr鉻52,Mn錳55,Fe鐵56,Co鈷59,Ni鎳59,Cu銅64,Zn鋅65,Ga鎵70,Ge鍺73,As砷75,Se硒79,Br溴80,Kr氪84,Rb銣85,Sr鍶88,Y釔89,Zr鋯91,Nb鈮93,Mo鉬96,Tc鎝98,Ru釕101,Rh銠103,Pd鈀106,Ag銀108,Cd鎘112,In銦115,Sn錫119,Sb銻122,Te碲128,I碘127,Xe氙131,Cs銫133,Ba鋇137,La鑭139,Ce鈰140,Pr鐠141,Nd釹144,Pm鉕145,Sm釤150,Eu銪152,Gd釓157,Tb鋱159,Dy鏑163,Ho鈥165,Er鉺167,Tm銩169,Yb鐿173,Lu鎦175,Hf鉿178,Ta鉭181,W鎢184,Re錸186,Os鋨190,Ir銥192,Pt鉑195,Au金197,Hg汞201,Tl鉈204,Pb鉛207,Bi鉍209,Po釙209,At砈210,Rn氡222,Fr鍅223,Ra鐳226,Ac錒227,Th釷232,Pa鏷231,U鈾238,Np錼237,Pu鈽244,Am鋂243,Cm鋦247,Bk鉳247,Cf鐦251,Es鑀252,Fm鐨257,Md鍆258,No鍩259,Lr鐒266,Rf鑪267,Db𨧀268,Sg𨭎269,Bh𨨏270,Hs𨭆277,Mt䥑278,Ds鐽281,Rg錀282,Cn鎶285,Nh鉨286,Fl鈇289,Mc鏌290,Lv鉝293,Ts鿬294,Og鿫294";
+const $=i=>document.getElementById(i),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ZY='ㄑㄧㄥ ㄏㄞˋ ㄌㄧˇ ㄆㄧˊ ㄆㄥˊ ㄊㄢˋ ㄉㄢˋ ㄧㄤˇ ㄈㄨˊ ㄋㄞˇ ㄋㄚˋ ㄇㄟˇ ㄌㄩˇ ㄒㄧˋ ㄌㄧㄣˊ ㄌㄧㄡˊ ㄌㄩˋ ㄧㄚˋ ㄐㄧㄚˇ ㄍㄞˋ ㄎㄤˋ ㄊㄞˋ ㄈㄢˊ ㄍㄜˋ ㄇㄥˇ ㄊㄧㄝˇ ㄍㄨˇ ㄋㄧㄝˋ ㄊㄨㄥˊ ㄒㄧㄣ ㄐㄧㄚ ㄓㄜˇ ㄕㄣ ㄒㄧ ㄒㄧㄡˋ ㄎㄜˋ ㄖㄨˊ ㄙ ㄧˇ ㄍㄠˋ ㄋㄧˊ ㄇㄨˋ ㄉㄜˊ ㄌㄧㄠˇ ㄌㄠˇ ㄅㄚˇ ㄧㄣˊ ㄍㄜˊ ㄧㄣ ㄒㄧˊ ㄊㄧ ㄉㄧˋ ㄉㄧㄢˇ ㄒㄧㄢ ㄙㄜˋ ㄅㄟˋ ㄌㄢˊ ㄕˋ ㄆㄨˇ ㄋㄩˇ ㄆㄛ ㄕㄢ ㄧㄡˇ ㄍㄚˊ ㄊㄜˋ ㄉㄧˊ ㄏㄨㄛˇ ㄦˇ ㄉㄧㄡ ㄧˇ ㄌㄧㄡˊ ㄏㄚ ㄊㄢˇ ㄨ ㄌㄞˊ ㄜˋ ㄧ ㄅㄛˊ ㄐㄧㄣ ㄍㄨㄥˇ ㄊㄚ ㄑㄧㄢ ㄅㄧˋ ㄆㄛ ㄞˋ ㄉㄨㄥ ㄈㄤ ㄌㄟˊ ㄚ ㄊㄨˇ ㄆㄨˊ ㄧㄡˊ ㄋㄚˊ ㄅㄨˋ ㄇㄟˊ ㄐㄩˊ ㄆㄟˊ ㄎㄚ ㄞ ㄈㄟˋ ㄇㄣˊ ㄋㄨㄛˋ ㄌㄠˊ ㄌㄨˊ ㄉㄨˋ ㄒㄧˇ ㄅㄛ ㄏㄟ ㄇㄞˋ ㄉㄚˊ ㄌㄨㄣˊ ㄍㄜ ㄋㄧˇ ㄈㄨ ㄇㄛˋ ㄌㄧˋ ㄊㄧㄢˊ ㄠˋ'.split(' ');
+const EL={};E.split(',').forEach((s,i)=>{const m=s.match(/^([A-Za-z]+)(\D+?)(\d+)$/u);EL[m[1]]={z:i+1,zh:m[2],m:+m[3],zy:ZY[i]}});
+const S=a=>new Set(a),CS=[[S([3,11,19,37,55,87]),'c1'],[S([4,12,20,38,56,88]),'c2'],[S([13,31,49,50,81,82,83,84,113,114,115,116]),'c4'],[S([5,14,32,33,51,52]),'c5'],[S([1,6,7,8,15,16,34]),'c6'],[S([9,17,35,53,85,117]),'c7'],[S([2,10,18,36,54,86,118]),'c8']];
+function cat(z){for(const[s,c]of CS)if(s.has(z))return c;return z>=57&&z<=71?'c9':z>=89&&z<=103?'c10':'c3'}
+function pos(z){if(z==1)return[1,1];if(z==2)return[1,18];if(z<=4)return[2,z-2];if(z<=10)return[2,z+8];if(z<=12)return[3,z-10];if(z<=18)return[3,z];if(z<=36)return[4,z-18];if(z<=54)return[5,z-36];if(z<=56)return[6,z-54];if(z<=71)return[9,z-54];if(z<=86)return[6,z-68];if(z<=88)return[7,z-86];if(z<=103)return[10,z-86];return[7,z-100]}
+const BT={};for(const[s,e]of Object.entries(EL)){const b=document.createElement('button'),[r,c]=pos(e.z);BT[s]=b;b.className='el '+cat(e.z);b.style.gridRow=r;b.style.gridColumn=c;b.innerHTML='<span class="r1"><i>'+e.zh+'</i><span class="rb"><u>'+e.z+'</u><b>'+s+'</b></span></span><span class="r2"><em>'+e.zy+'</em><s>'+e.m+'</s></span>';b.onclick=()=>press(s);$('pt').appendChild(b)}
+[[6,'鑭系','c9'],[7,'錒系','c10']].forEach(([r,t,c])=>{const d=document.createElement('div');d.className='ph '+c;d.style.gridRow=r;d.style.gridColumn=3;d.textContent=t;$('pt').appendChild(d)});
+{const c=EL.Cr,d=document.createElement('div');d.id='info';d.innerHTML='<div id="demo"><div class="lb l"><span>中文名稱</span><span>注音</span></div><div class="el c3 demo"><span class="r1"><i>'+c.zh+'</i><span class="rb"><u>'+c.z+'</u><b>Cr</b></span></span><span class="r2"><em>'+c.zy+'</em><s>'+c.m+'</s></span></div><div class="lb r"><span>元素符號</span><span>原子序</span><span>原子量</span></div></div><div id="lg">'+[['c1','鹼金屬'],['c2','鹼土金屬'],['c3','過渡金屬'],['c4','其他金屬'],['c5','類金屬'],['c6','非金屬'],['c7','鹵素'],['c8','惰性氣體'],['c9','鑭系元素'],['c10','錒系元素']].map(a=>'<div><i class="'+a[0]+'"></i>'+a[1]+'</div>').join('')+'</div>';$('pt').appendChild(d)}
+// ---- 化學式解析 ----
+const atoms=s=>{const l=[];let i=0;while(i<s.length){const m=s.slice(i).match(/^([A-Z][a-z]?)(\d*)/);if(!m||!EL[m[1]])return{err:'不認得「'+s.slice(i,i+2)+'」'};for(let k=m[2]===''?1:+m[2];k--;)l.push(m[1]);i+=m[0].length}return{l}};
+const canon=l=>{let o='',i=0;while(i<l.length){let j=i;while(l[j]==l[i])j++;o+=l[i]+(j-i>1?j-i:'');i=j}return o};
+function parseF(f){f=f.replace(/（/g,'(').replace(/）/g,')').replace(/\s/g,'');const items=[];let i=0;
+ while(i<f.length){if(f[i]=='('){const j=f.indexOf(')',i);if(j<0)return{err:'括號沒有成對'};const p=atoms(f.slice(i+1,j));if(p.err)return p;i=j+1;const m=f.slice(i).match(/^\d+/),n=m?+m[0]:1;if(m)i+=m[0].length;const key=canon(p.l);
+  if(n>1){if(!D.groups.includes(key))return{err:'原子團「'+key+'」不在清單，請先新增原子團'};for(let k=0;k<n;k++)items.push({t:'g',v:key})}else p.l.forEach(v=>items.push({t:'a',v}))}
+  else{const m=f.slice(i).match(/^([A-Z][a-z]?)(\d*)/);if(!m||!EL[m[1]])return{err:'不認得「'+f.slice(i,i+2)+'」'};for(let k=m[2]===''?1:+m[2];k--;)items.push({t:'a',v:m[1]});i+=m[0].length}}
+ return items.length?{items}:{err:'請輸入化學式'}}
+const flat=it=>it.flatMap(x=>x.t=='g'?atoms(x.v).l:[x.v]),mass=it=>flat(it).reduce((a,s)=>a+EL[s].m,0);
+const sub=n=>n>1?'<sub>'+n+'</sub>':'';
+function fh(items){let o='',i=0;while(i<items.length){let j=i;while(j<items.length&&items[j].t==items[i].t&&items[j].v==items[i].v)j++;const n=j-i,x=items[i];o+=x.t=='a'?x.v+sub(n):'<span class="g">('+gh(x.v)+')</span>'+sub(n);i=j}return o}
+const gh=k=>fh(atoms(k).l.map(v=>({t:'a',v})));
+// ---- 題庫 ----
+const K='chemGame1';
+let D={range:'all',n:10,nh:4,groups:['OH','SO4','NO3','CO3','NH4','PO4','HCO3','ClO3'],bank:[['水','H2O'],['二氧化碳','CO2'],['氨','NH3'],['甲烷','CH4'],['氯化鈉','NaCl'],['氯化氫','HCl'],['氧氣','O2'],['氮氣','N2'],['氫氧化鈉','NaOH'],['硫酸','H2SO4'],['碳酸鈣','CaCO3'],['氧化鎂','MgO'],['硝酸','HNO3'],['氫氧化鉀','KOH']].map(a=>({n:a[0],f:a[1],d:'易',h:'',c:0})).concat([['氫氧化鈣','Ca(OH)2','由鈣離子與氫氧根組成'],['氫氧化鎂','Mg(OH)2'],['氫氧化鋁','Al(OH)3'],['硫酸鋁','Al2(SO4)3','鋁離子＋硫酸根'],['硫酸銨','(NH4)2SO4'],['硝酸鈣','Ca(NO3)2'],['氫氧化鋇','Ba(OH)2'],['磷酸鈣','Ca3(PO4)2'],['硝酸鎂','Mg(NO3)2'],['氫氧化鐵','Fe(OH)3']].map(a=>({n:a[0],f:a[1],d:'難',h:a[2]||'',c:0})))};
+try{const s=JSON.parse(localStorage.getItem(K));if(s&&s.bank)D=s}catch(e){}
+const EX={水:'生命不可缺少，由氫與氧組成',二氧化碳:'呼吸與燃燒都會產生，也是溫室氣體',氨:'有刺鼻氣味，可製成肥料',甲烷:'天然氣的主要成分',氯化鈉:'食鹽的主要成分',氯化氫:'溶於水就成為鹽酸',氧氣:'支持燃燒與呼吸，約占空氣五分之一',氮氣:'約占空氣五分之四，性質穩定',氫氧化鈉:'又稱燒鹼，強鹼，有腐蝕性',硫酸:'強酸，有腐蝕性，用於電池與工業',碳酸鈣:'石灰石、大理石、蛋殼的主要成分',氧化鎂:'鎂燃燒後產生的白色粉末',硝酸:'強酸，可製造肥料與炸藥',氫氧化鉀:'強鹼，常用來製作肥皂',氫氧化鈣:'俗稱熟石灰，水溶液是石灰水',氫氧化鎂:'制酸劑成分，可中和胃酸',氫氧化鋁:'常見的制酸劑成分',硫酸鋁:'淨水劑，可使水中雜質沉澱',硫酸銨:'常見的氮肥',硝酸鈣:'常見的肥料成分',氫氧化鋇:'強鹼，也可用來檢驗二氧化碳',磷酸鈣:'骨頭與牙齒的主要成分',硝酸鎂:'用於肥料與煙火',氫氧化鐵:'紅褐色的沉澱物'};
+D.bank.forEach(q=>{if(q.e===undefined)q.e=EX[q.n]||''});D.n=D.n||10;if(D.nh===undefined)D.nh=4;
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(D))}catch(e){}};
+const pool=()=>D.bank.filter(q=>D.range=='all'||(D.range=='easy'&&q.d=='易')||(D.range=='hard'&&q.d=='難')||(D.range=='custom'&&q.c)).map(q=>Object.assign({},q,parseF(q.f))).filter(q=>!q.err);
+// ---- 遊戲 ----
+let Q,P,tiles,cur,seq,buf,gbtn,tg,solved,busy,streak=0,newG=null,landI=-1,AC,mute=false;
+function sfx(a,d=.13,ty='sine',v=.15){if(mute)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();a.forEach((f,i)=>{const o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime+i*d;o.type=ty;o.frequency.value=f;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d*1.8);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d*2)})}catch(e){}}
+$('snd').onclick=()=>{mute=!mute;$('snd').textContent=mute?'🔇':'🔊'};
+function confetti(x,y,n){const C=['#ff5252','#ffca28','#66bb6a','#42a5f5','#ab47bc','#ff7043'];for(let k=0;k<n;k++){const d=document.createElement('div');d.className='cf';d.style.cssText='left:'+x+'px;top:'+y+'px;background:'+C[k%6];document.body.appendChild(d);const dx=(Math.random()-.5)*500,dy=-Math.random()*260-40;d.animate([{transform:'translate(0,0) rotate(0)',opacity:1},{transform:'translate('+dx/2+'px,'+dy+'px) rotate(200deg)',opacity:1,offset:.45},{transform:'translate('+dx+'px,'+(dy+420)+'px) rotate(560deg)',opacity:0}],{duration:1400+Math.random()*600,easing:'ease-out'}).onfinish=()=>d.remove()}}
+const shake=()=>{const s=$('seq');s.classList.remove('shake');void s.offsetWidth;s.classList.add('shake')};
+const PR=['太棒了！新物質誕生！','答對了，你好厲害！','化學小天才！','完美！繼續加油！'];
+function info(q){$('ovl').innerHTML=`<div class="ov" onclick="$('ovl').innerHTML=''"><div class="box" style="text-align:center"><div class="nb" style="animation:none;font-size:22px"><div class="f">${fh(q.items)}</div>${esc(q.n)}　分子量 ${mass(q.items)}</div><p style="font-size:22px">${esc(q.e||'')}</p><small>點一下關閉</small></div></div>`}
+function run(){const A=pool(),T=Math.max(1,D.n||10),sh=a=>a.sort(()=>Math.random()-.5);let L;
+ if(D.range=='all'){const H=sh(A.filter(q=>q.d=='難')),Ez=sh(A.filter(q=>q.d!='難')),nh=Math.min(D.nh,H.length,T),ne=Math.min(T-nh,Ez.length);L=H.slice(0,nh).concat(Ez.slice(0,ne));L=L.concat(H.slice(nh).concat(Ez.slice(ne)).slice(0,T-L.length))}else L=sh(A).slice(0,T);
+ P=L;tiles=sh(L.slice()).map(q=>({q,done:0}));tg=tiles.length;const rw=Math.ceil(tg/5)||1;$('list').style.height=rw*7.5+'vh';$('list').style.gridTemplateRows='repeat('+rw+',minmax(0,1fr))';busy=false;streak=0;$('ovl').innerHTML='';pick(-1)}
+function pick(i){cur=i;Q=i>=0?tiles[i].q:null;seq=[];buf=null;gbtn=[];solved=false;$('msg').innerHTML='';$('hint').textContent='';
+ $('qn').innerHTML=Q?'請組出：<b>'+esc(Q.n)+'</b> <span class="bd">'+(Q.d=='難'?'進階':'基本')+'</span>':(tg?'👇 請先在下方選一個物質格子':'此範圍沒有題目，請老師新增');
+ $('hintb').style.display=Q&&Q.h?'':'none';render()}
+function render(){let h=fh(seq);if(buf)h+='<span class="op">(</span>'+fh(buf.map(v=>({t:'a',v})));$('seq').innerHTML=h||'<span class="ph0">依化學式順序，點選元素…</span>';
+ $('gb').innerHTML='';gbtn.forEach(k=>{const b=document.createElement('button');b.innerHTML=gh(k);if(k==newG)b.className='new';b.onclick=()=>{if(busy||solved)return;seq.push({t:'g',v:k});render()};$('gb').appendChild(b)});newG=null;
+ $('cnt').textContent=tiles.filter(t=>t.done).length;$('tg').textContent=tg;
+ const L=$('list');L.innerHTML='';tiles.forEach((t,i)=>{const d=document.createElement('div');d.id='tile'+i;d.className='tile'+(t.done?' done':'')+(i==cur?' sel':'')+(i==landI?' land':'');d.innerHTML=t.done?'<b>'+fh(t.q.items)+'</b>'+esc(t.q.n):esc(t.q.n);d.onclick=()=>{if(busy)return;if(t.done)info(t.q);else{sfx([700],.06,'triangle',.08);pick(i)}};L.appendChild(d)});landI=-1}
+const say=(t,c)=>{$('msg').innerHTML='<span class="'+c+'">'+t+'</span>'};
+const need=()=>{if(busy||solved)return 1;if(!Q){say('請先在下方選一個物質格子','bad');return 1}};
+function mini(t,x,y){const d=document.createElement('div');d.className='mini';d.textContent=t;d.style.left=x+'px';d.style.top=y+'px';document.body.appendChild(d);return d}
+function ft(t,x,y,c,sz){const d=document.createElement('div');d.className='fl';d.textContent=t;d.style.cssText='left:'+x+'px;top:'+y+'px;color:'+c+';font-size:'+sz;document.body.appendChild(d);d.animate([{transform:'translate(-50%,0) scale(.5)',opacity:0},{transform:'translate(-50%,-30px) scale(1.2)',opacity:1,offset:.25},{transform:'translate(-50%,-100px) scale(1)',opacity:0}],{duration:1500,easing:'ease-out'}).onfinish=()=>d.remove()}
+function banner(q,ex,pt){const c=Math.random()<.5?'#ff2d55':'#1e90ff',b=document.createElement('div'),T='translateX(-50%) ';b.className='bnr';b.innerHTML='<span>'+esc(q.n)+'</span><small>'+fh(ex)+'</small>';b.style.cssText='left:'+(pt.left+pt.width/2)+'px;top:'+(pt.top+pt.height*.36)+'px;color:'+c+';text-shadow:0 0 12px '+c+',0 0 28px '+c;document.body.appendChild(b);
+ b.animate([{transform:T+'scale(2.4) rotate(-14deg)',opacity:0},{transform:T+'scale(1) rotate(-4deg)',opacity:1,offset:.18},{transform:T+'scale(1) rotate(-4deg)',opacity:1,offset:.8},{transform:T+'translateY(-30px) scale(.9) rotate(-4deg)',opacity:0}],{duration:1900}).onfinish=()=>b.remove()}
+function press(s){if(need())return;sfx([880],.05,'triangle',.07);
+ const bt=BT[s];if(bt){bt.classList.remove('hit');void bt.offsetWidth;bt.classList.add('hit');const r=bt.getBoundingClientRect(),t=$('seq').getBoundingClientRect(),x=r.left+r.width/2-20,y=r.top+r.height/2-20,d=mini(s,x,y);d.animate([{transform:'translate(0,0) scale(1)',opacity:1},{transform:'translate('+(t.left+t.width*.3-x)+'px,'+(t.top+t.height/2-20-y)+'px) scale(.6)',opacity:.3}],{duration:380,easing:'ease-in'}).onfinish=()=>d.remove()}
+ (buf?buf:seq).push(buf?s:{t:'a',v:s});render()}
+$('bl').onclick=()=>{if(need()||buf)return;buf=[];say('括號內放原子團的原子，再按「）」','');render()};
+$('br').onclick=()=>{if(need())return;if(!buf||!buf.length){buf=null;say('先按「（」，再點原子團裡的原子','bad');render();return}
+ const k=canon(buf);buf=null;if(D.groups.includes(k)){if(!gbtn.includes(k)){gbtn.push(k);newG=k}seq.push({t:'g',v:k});sfx([660,880],.1);say('✨ 原子團做好了，已放進化學式！還需要幾個，就再按粉紅按鈕','good')}else say('「'+gh(k)+'」不是常見原子團，已退回','bad');render()};
+$('undo').onclick=()=>{if(busy||solved)return;if(buf){buf.length?buf.pop():buf=null}else seq.pop();$('msg').innerHTML='';render()};
+$('clr').onclick=()=>{if(busy||solved)return;seq=[];buf=null;gbtn=[];$('msg').innerHTML='';render()};
+$('hintb').onclick=()=>{if(Q)$('hint').textContent=Q.h};
+$('ok').onclick=()=>{if(need())return;
+ if(buf){say('括號還沒關起來，請按「）」','bad');return}if(!seq.length){say('還沒點任何元素喔','bad');return}
+ const ex=Q.items;if(seq.length==ex.length&&seq.every((x,i)=>x.t==ex[i].t&&x.v==ex[i].v)){solved=busy=true;render();say('🎉 '+PR[Math.random()*PR.length|0],'good');streak++;fly(ex,Q,cur);return}
+ const same=flat(seq).join()==flat(ex).join(),eg=ex.some(x=>x.t=='g'),sg=seq.some(x=>x.t=='g');
+ say(same?(eg&&!sg?'原子團要加括號喔！':!eg&&sg?'只有一個原子團，不用括號':'原子團的個數不對'):'順序或個數不對，差一點點，再試一次！','bad');sfx([294,220],.16);streak=0;shake()};
+function fly(ex,q,i){const pt=$('pt').getBoundingClientRect(),sq=$('seq').getBoundingClientRect(),cx=pt.left+pt.width/2,ty=pt.top+20,at=flat(ex),n=at.length,st=Math.min(46,(sq.width-40)/n);
+ const M=at.map((a,k)=>mini(a,sq.left+16+k*st,sq.top+sq.height/2-20));
+ M.forEach(d=>{const r=d.getBoundingClientRect();d.animate([{transform:'translate(0,0) scale(1)'},{transform:'translate('+(cx-20-r.left)+'px,'+(ty+65-r.top)+'px) scale(.55)'}],{duration:650,easing:'ease-in',fill:'forwards'})});
+ sfx([392,440,494],.1,'triangle',.08);
+ setTimeout(()=>{M.forEach(d=>d.remove());
+  const fx=document.createElement('div');fx.className='fx';fx.style.left=(cx-60)+'px';fx.style.top=(ty+5)+'px';document.body.appendChild(fx);fx.animate([{transform:'scale(.2)',opacity:1},{transform:'scale(4)',opacity:0}],{duration:450}).onfinish=()=>fx.remove();
+  banner(q,ex,pt);
+  const el=document.createElement('div');el.className='nb fly';el.innerHTML='<div class="f">'+fh(ex)+'</div>'+esc(q.n)+'　分子量 '+mass(ex)+(q.e?'<div class="ex">'+esc(q.e)+'</div>':'');document.body.appendChild(el);
+  const w=el.offsetWidth,h=el.offsetHeight;el.style.left=(cx-w/2)+'px';el.style.top=ty+'px';
+  confetti(cx,ty+h/2,45);sfx([523,659,784,1047],.12);
+  ft('+'+mass(ex),cx+w/2+80,ty+h/2,'#ffb300','min(7vw,10vh)');if(streak>1){ft('×'+streak+' 連擊！',cx-w/2-100,ty+h/2,'#ff5722','min(5vw,8vh)');setTimeout(()=>sfx([880,1175,1397],.1),400)}
+  setTimeout(()=>{const t=$('tile'+i).getBoundingClientRect();el.style.transition='transform .9s cubic-bezier(.5,0,.2,1),opacity .9s';
+   el.style.transform='translate('+(t.left+t.width/2-cx)+'px,'+(t.top+t.height/2-ty-h/2)+'px) scale('+Math.min(t.width/w,t.height/h)+')';el.style.opacity='.5';
+   setTimeout(()=>{el.remove();tiles[i].done=1;busy=false;landI=i;pick(-1);const b=$('tile'+i).getBoundingClientRect();confetti(b.left+b.width/2,b.top+b.height/2,25);sfx([784,988],.1);if(tiles.every(x=>x.done))setTimeout(win,500)},950)},q.e?3600:2200)},650)}
+function win(){sfx([523,659,784,1047,784,1047,1319],.14);[0,500,1000].forEach(t=>setTimeout(()=>confetti(innerWidth*(.25+Math.random()*.5),innerHeight*.5,60),t));$('ovl').innerHTML='<div class="ov"><div class="box" style="text-align:center"><h1 style="font-size:44px">🎉 過關！</h1><p style="font-size:22px">你製造了 '+tg+' 種新物質</p><div id="wl" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;text-align:left"></div><button id="again" style="font-size:24px;padding:10px 24px">再玩一次</button></div></div>';
+ tiles.forEach(t=>{const d=document.createElement('div');d.className='t';d.innerHTML='<b>'+fh(t.q.items)+'</b>'+esc(t.q.n);$('wl').appendChild(d)});$('again').onclick=run}
+// ---- Excel ----
+const CT=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+const crc=u=>{let c=-1;for(const b of u)c=CT[(c^b)&255]^(c>>>8);return(c^-1)>>>0};
+function zip(files){const en=new TextEncoder(),parts=[],cd=[];let off=0;
+ for(const[n,t]of files){const nb=en.encode(n),d=en.encode(t),c=crc(d),h=new DataView(new ArrayBuffer(30));
+  h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint16(12,0x21,true);h.setUint32(14,c,true);h.setUint32(18,d.length,true);h.setUint32(22,d.length,true);h.setUint16(26,nb.length,true);
+  parts.push(new Uint8Array(h.buffer),nb,d);
+  const g=new DataView(new ArrayBuffer(46));g.setUint32(0,0x02014b50,true);g.setUint16(4,20,true);g.setUint16(6,20,true);g.setUint16(8,0x0800,true);g.setUint16(14,0x21,true);g.setUint32(16,c,true);g.setUint32(20,d.length,true);g.setUint32(24,d.length,true);g.setUint16(28,nb.length,true);g.setUint32(42,off,true);
+  cd.push(new Uint8Array(g.buffer),nb);off+=30+nb.length+d.length}
+ let cl=0;cd.forEach(x=>cl+=x.length);const e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cl,true);e.setUint32(16,off,true);
+ return new Blob([...parts,...cd,new Uint8Array(e.buffer)],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})}
+const xe=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const xd=t=>t.replace(/&#(\d+);/g,(m,n)=>String.fromCodePoint(+n)).replace(/&#x([0-9a-fA-F]+);/g,(m,n)=>String.fromCodePoint(parseInt(n,16))).replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&amp;/g,'&');
+function xlsx(rows){const H='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>',R='http://schemas.openxmlformats.org/package/2006/relationships',O='http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+ const sh=H+'<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><cols>'+[16,18,12,30,44].map((w,i)=>'<col min="'+(i+1)+'" max="'+(i+1)+'" width="'+w+'" customWidth="1"/>').join('')+'</cols><sheetData>'+rows.map((r,i)=>'<row r="'+(i+1)+'">'+r.map((v,j)=>'<c r="'+'ABCDE'[j]+(i+1)+'" t="inlineStr"><is><t xml:space="preserve">'+xe(v)+'</t></is></c>').join('')+'</row>').join('')+'</sheetData></worksheet>';
+ return zip([['[Content_Types].xml',H+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>'],
+ ['_rels/.rels',H+'<Relationships xmlns="'+R+'"><Relationship Id="rId1" Type="'+O+'/officeDocument" Target="xl/workbook.xml"/></Relationships>'],
+ ['xl/workbook.xml',H+'<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="'+O+'"><sheets><sheet name="題庫" sheetId="1" r:id="rId1"/></sheets></workbook>'],
+ ['xl/_rels/workbook.xml.rels',H+'<Relationships xmlns="'+R+'"><Relationship Id="rId1" Type="'+O+'/worksheet" Target="worksheets/sheet1.xml"/></Relationships>'],['xl/worksheets/sheet1.xml',sh]])}
+async function unzip(buf){const u=new Uint8Array(buf),v=new DataView(buf),de=new TextDecoder(),out={};let e=u.length-22;while(e>=0&&v.getUint32(e,true)!=0x06054b50)e--;if(e<0)throw 0;const n=v.getUint16(e+10,true);let p=v.getUint32(e+16,true);
+ for(let i=0;i<n;i++){const m=v.getUint16(p+10,true),cs=v.getUint32(p+20,true),nl=v.getUint16(p+28,true),xl=v.getUint16(p+30,true),cl=v.getUint16(p+32,true),lo=v.getUint32(p+42,true),name=de.decode(u.subarray(p+46,p+46+nl));p+=46+nl+xl+cl;
+  const st=lo+30+v.getUint16(lo+26,true)+v.getUint16(lo+28,true),data=u.subarray(st,st+cs);
+  out[name]=m==0?de.decode(data):await new Response(new Blob([data]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).text()}return out}
+function sheetRows(x,ss){const rows=[];(x.match(/<row\b[\s\S]*?<\/row>/g)||[]).forEach(r=>{const row=[];(r.match(/<c\b[^>]*?(?:\/>|>[\s\S]*?<\/c>)/g)||[]).forEach(c=>{const ref=c.match(/\br="([A-Z]+)/),ci=ref?ref[1].charCodeAt(0)-65:row.length,t=(c.match(/\bt="(\w+)"/)||[])[1];let v='';
+  if(t=='s'){const m=c.match(/<v>(\d+)<\/v>/);v=m?ss[+m[1]]||'':''}else if(t=='inlineStr')v=(c.match(/<t\b[^>]*>[\s\S]*?<\/t>/g)||[]).map(z=>z.replace(/<[^>]+>/g,'')).join('');else{const m=c.match(/<v>([\s\S]*?)<\/v>/);v=m?m[1]:''}row[ci]=xd(v)});rows.push(row)});return rows}
+const ssList=x=>(x.match(/<si>[\s\S]*?<\/si>/g)||[]).map(si=>(si.replace(/<rPh[\s\S]*?<\/rPh>/g,'').match(/<t\b[^>]*>[\s\S]*?<\/t>/g)||[]).map(z=>z.replace(/<[^>]+>/g,'')).join(''));
+function csvRows(t){const rows=[];let r=[],c='',q=false;for(let i=0;i<t.length;i++){const ch=t[i];if(q){if(ch=='"'){if(t[i+1]=='"'){c+='"';i++}else q=false}else c+=ch}else if(ch=='"')q=true;else if(ch==','){r.push(c);c=''}else if(ch=='\n'||ch=='\r'){if(ch=='\r'&&t[i+1]=='\n')i++;r.push(c);rows.push(r);r=[];c=''}else c+=ch}if(c!==''||r.length){r.push(c);rows.push(r)}return rows}
+function importRows(rows){if(rows.length&&String(rows[0][0]||'').includes('中文名稱'))rows=rows.slice(1);const add=[],bad=[];
+ rows.forEach(r=>{const n=String(r[0]||'').trim(),f=String(r[1]||'').trim().replace(/（/g,'(').replace(/）/g,')');if(!n&&!f)return;
+  (f.match(/\(([^()]*)\)\d+/g)||[]).forEach(m=>{const a=atoms(m.slice(1,m.indexOf(')')));if(!a.err&&a.l.length){const k=canon(a.l);if(!D.groups.includes(k))D.groups.push(k)}});
+  const p=parseF(f);if(!n||p.err){bad.push(n||f);return}add.push({n,f,d:String(r[2]||'').includes('難')?'難':'易',h:String(r[3]||'').trim(),e:String(r[4]||'').trim(),c:1})});
+ if(!add.length){alert('沒有可匯入的題目，請確認欄位：中文名稱、化學式、難易、提示、說明');return}
+ if(confirm('讀到 '+add.length+' 題'+(bad.length?'（略過 '+bad.length+' 題化學式有誤：'+bad.slice(0,5).join('、')+'）':'')+'。\n按「確定」＝取代現有題庫\n按「取消」＝加到現有題庫後面'))D.bank=add;else D.bank=D.bank.concat(add);save();tpanel()}
+// ---- end Excel ----
+// ---- 老師模式 ----
+let ed=-1;
+$('tb').onclick=()=>{$('ovl').innerHTML='<div class="ov"><div class="box"><h3>老師模式</h3><input id="pw" type="password" placeholder="密碼"><button id="pwo">進入</button><button id="pwx">取消</button><div id="pwm" class="bad"></div></div></div>';
+ $('pwx').onclick=()=>{$('ovl').innerHTML=''};$('pwo').onclick=()=>{if($('pw').value=='scigjong6838')tpanel();else $('pwm').textContent='密碼錯誤'}};
+function tpanel(){ed=-1;$('ovl').innerHTML=`<div class="ov"><div class="box"><h3>老師模式</h3>出題範圍：<select id="rg"><option value="all">全部</option><option value="easy">只考基本（易）</option><option value="hard">只考進階（難）</option><option value="custom">只考自訂題</option></select>　每局<input id="nn" type="number" min="1" max="20" style="width:64px">題，其中進階<input id="nh" type="number" min="0" max="20" style="width:64px">題<small>（範圍選「全部」時依此分配）</small>
+<hr><b id="ft">新增題目</b><br><input id="tn" placeholder="中文名稱，如 硫酸鋁"><input id="tf" placeholder="化學式，如 Al2(SO4)3"><select id="td"><option>易</option><option>難</option></select><input id="th" placeholder="提示（可空白）"><br><input id="te" placeholder="說明內容（答對後顯示，可空白）" style="width:90%"><button id="ta">新增</button><div id="tp" style="font-size:20px;min-height:28px"></div>
+<hr><b>題庫</b><table id="tl"></table><hr><b>原子團</b>（寫法如 SO4）：<span id="tg2"></span><br><input id="gi" placeholder="新增原子團，如 ClO3"><button id="ga">新增原子團</button><div id="gm" class="bad"></div>
+<hr><button id="ex">匯出題庫（Excel）</button><label><button onclick="this.nextSibling.click()">匯入題庫（Excel／CSV）</button><input type="file" id="im" accept=".xlsx,.csv,.json" style="display:none"></label><button id="rs">還原預設題庫</button><button id="tc" style="float:right;background:#2e7d32;color:#fff">完成並重新開始</button></div></div>`;
+ $('rg').value=D.range;$('rg').onchange=()=>{D.range=$('rg').value;save()};$('nn').value=D.n;$('nh').value=D.nh;$('nn').onchange=$('nh').onchange=()=>{D.n=Math.max(1,Math.min(20,+$('nn').value||10));D.nh=Math.max(0,Math.min(D.n,+$('nh').value||0));$('nn').value=D.n;$('nh').value=D.nh;save()};$('tf').oninput=pv;
+ $('ta').onclick=()=>{const n=$('tn').value.trim(),f=$('tf').value.trim(),r=parseF(f);if(!n||r.err){$('tp').innerHTML='<span class="bad">'+(r.err||'請輸入名稱')+'</span>';return}
+  const q={n,f,d:$('td').value,h:$('th').value.trim(),e:$('te').value.trim(),c:1};if(ed>=0){q.c=D.bank[ed].c;D.bank[ed]=q}else D.bank.push(q);save();tlist();$('tn').value=$('tf').value=$('th').value=$('te').value='';ed=-1;$('ta').textContent='新增';$('ft').textContent='新增題目';$('tp').innerHTML=''};
+ $('ga').onclick=()=>{const p=atoms($('gi').value.trim());if(p.err||!p.l.length){$('gm').textContent=p.err||'請輸入原子團';return}const k=canon(p.l);if(!D.groups.includes(k))D.groups.push(k);$('gm').textContent='';$('gi').value='';save();tlist()};
+ $('ex').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(xlsx([['中文名稱','化學式','難易（易/難）','提示','說明']].concat(D.bank.map(q=>[q.n,q.f,q.d,q.h||'',q.e||'']))));a.download='化學式題庫.xlsx';a.click()};
+ $('im').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const buf=await f.arrayBuffer();
+  if(/\.json$/i.test(f.name)){const o=JSON.parse(new TextDecoder().decode(buf));if(!o.bank)throw 0;D=o;save();tpanel();return}
+  let rows;if(/\.xlsx$/i.test(f.name)){const z=await unzip(buf),sn=Object.keys(z).filter(k=>/^xl\/worksheets\/sheet\d+\.xml$/.test(k)).sort()[0];rows=sheetRows(z[sn],z['xl/sharedStrings.xml']?ssList(z['xl/sharedStrings.xml']):[])}
+  else{let t;try{t=new TextDecoder('utf-8',{fatal:true}).decode(buf)}catch(x){t=new TextDecoder('big5').decode(buf)}rows=csvRows(t.replace(/^\uFEFF/,''))}
+  importRows(rows)}catch(x){alert('讀不到檔案，請確認是 .xlsx 或 .csv 檔')}e.target.value=''};
+ $('rs').onclick=()=>{if(confirm('確定還原預設題庫？自訂題會消失')){localStorage.removeItem(K);location.reload()}};
+ $('tc').onclick=run;tlist()}
+function pv(){const f=$('tf').value,r=parseF(f);$('tp').innerHTML=!f?'':r.err?'<span class="bad">'+r.err+'</span>':fh(r.items)+'　分子量 '+mass(r.items)+'　按鍵：'+r.items.map(x=>x.t=='g'?'['+x.v+']':x.v).join(' ')}
+function tlist(){$('tg2').innerHTML=D.groups.map(gh).join('、');$('tl').innerHTML=D.bank.map((q,i)=>'<tr><td>'+esc(q.n)+'</td><td>'+esc(q.f)+'</td><td>'+q.d+(q.c?' ★':'')+'</td><td><button data-e="'+i+'">編輯</button><button data-d="'+i+'">刪除</button></td></tr>').join('');
+ $('tl').onclick=e=>{const t=e.target.dataset;if(t.d!==undefined){D.bank.splice(+t.d,1);save();tlist()}if(t.e!==undefined){ed=+t.e;const q=D.bank[ed];$('tn').value=q.n;$('tf').value=q.f;$('td').value=q.d;$('th').value=q.h;$('te').value=q.e||'';$('ta').textContent='更新';$('ft').textContent='編輯題目';pv()}}}
+function fitTiles(){const R=document.documentElement.style;let k=1.3;R.setProperty('--k',k);for(let n=0;n<4;n++){let w=0;document.querySelectorAll('#pt .el:not(.demo)').forEach(e=>{const r1=e.querySelector('.r1'),bb=r1.querySelector('b');bb.style.marginLeft='';bb.style.marginLeft=(-.2*bb.offsetWidth)+'px';const need=r1.children[0].getBoundingClientRect().width+r1.children[1].getBoundingClientRect().width,have=e.clientWidth-parseFloat(getComputedStyle(e).paddingLeft)*2;w=Math.max(w,need/have)});if(w<=1)break;k=Math.max(1,k/w*.98);R.setProperty('--k',k)}}
+addEventListener('resize',fitTiles);fitTiles();
+run();
+</script></body></html>
