@@ -48,15 +48,25 @@ table{border-collapse:collapse;width:100%;font-size:14px}td{border-bottom:1px so
 #lg{display:grid;grid-template-columns:repeat(4,auto);gap:.8vh .9vw;font-size:min(.9vw,1.5vh)}#lg div{display:flex;align-items:center;gap:.4vw;white-space:nowrap}#lg i{width:min(2vw,3vh);height:min(2vw,3vh);border-radius:4px;border:1px solid rgba(0,0,0,.25)}
 #help{width:100%;font-size:min(24px,3vh);padding:1.6vh 4px;border-radius:12px;border:2px solid #e0a040;background:#fff4dc;font-weight:700;color:#8a5a00}
 #tdoc{border:2px solid #e0a040;background:#fff9ec;border-radius:10px;padding:6px 12px;margin-bottom:8px;font-size:15px;line-height:1.6}#tdoc summary{font-weight:700;cursor:pointer;font-size:17px;color:#8a5a00}#tdoc ol{margin:6px 0 2px;padding-left:1.3em}
+#modes button{font-size:min(2.6vh,1.5vw);padding:.25em 1em;margin:0 .3em;border-radius:20px;border:2px solid #fff;background:transparent;color:#fff;font-weight:700}#modes button.on{background:#fff;color:#27408b}
+.el{position:relative}.em .el.has{box-shadow:inset 0 0 0 3px #e0a000}
+.el.big{width:min(22vw,32vh);height:min(22vw,32vh);flex:none}.big .r1 b{font-size:min(6vw,9vh)}.big .r1 i{font-size:min(5.6vw,8.5vh)}.big .r1 u,.big s{font-size:min(2.4vw,3.6vh)}.big .r2 em{font-size:min(2vw,3vh)}
+.ec{position:fixed;inset:0;z-index:9;background:#f4f6fb;display:flex;flex-direction:column;overflow:hidden}
+.ect{display:flex;align-items:center;gap:1vw;padding:1vh 1.5vw;background:#27408b;color:#fff;font-size:min(3vh,1.8vw)}.ect b{flex:1;text-align:center}.ect button{font-size:1em;padding:.35em 1em;border-radius:10px;border:0;background:#fff;color:#27408b;font-weight:700}
+.ecb{flex:1;min-height:0;display:flex;gap:2vw;padding:2vh 2vw}.ecl{flex:0 0 40%;display:flex;flex-direction:column;gap:1.5vh;align-items:center;min-height:0}
+.ecr{flex:1;overflow:auto;font-size:min(3vh,1.7vw);line-height:1.6}.ecr h1{margin:0;font-size:2.2em}.ecr h1 small{font-size:.45em;color:#555;font-family:Arial}.ecr h3{margin:.6em 0 .1em;color:#27408b}.ecr p{margin:0}
+.chip{display:inline-block;padding:.05em .7em;border-radius:1em;margin:0 .4em .3em 0;border:1px solid rgba(0,0,0,.25);font-size:.75em;background:#fff}
+.imgs{display:flex;gap:1vw;flex:1;min-height:0;width:100%;justify-content:center;align-items:center}.imgs img{max-height:100%;max-width:48%;object-fit:contain;border-radius:8px;border:1px solid #ccc;background:#fff}.noimg{border:2px dashed #aab;border-radius:10px;color:#889;padding:2vh 2vw;font-size:min(2.4vh,1.4vw)}.src{font-size:min(2vh,1.2vw);color:#666}
+#ovl .box textarea{width:96%;font-size:15px;padding:5px;margin:3px;border:1px solid #9aa7c7;border-radius:6px;font-family:inherit}.thumb{display:inline-block;margin:4px;text-align:center}.thumb img{height:90px;border:1px solid #aaa;border-radius:6px;display:block}
 </style></head><body>
-<header><h1>⚗️ 化學式組合：依化學式順序點元素</h1><span>成就 <b id="cnt">0</b>/<b id="tg">10</b> <button id="snd" title="音效">🔊</button> <button id="tb" title="老師">⚙</button></span></header>
-<div id="wrap"><div><div id="pt"></div><div id="list"></div></div><aside>
+<header><h1>⚗️ 化學式組合：依化學式順序點元素</h1><span id="modes"><button id="mQ" class="on">⚗️ 組合分子</button><button id="mE">🔬 元素認識</button></span><span>成就 <b id="cnt">0</b>/<b id="tg">10</b> <button id="snd" title="音效">🔊</button> <button id="tb" title="老師">⚙</button></span></header>
+<div id="wrap"><div><div id="pt"></div><div id="list"></div></div><aside><div id="qside">
 <div class="card"><div id="qn"></div><button id="hintb">💡提示</button> <span id="hint"></span></div>
 <div class="card"><div id="seq"></div><div id="gb"></div>
 <div class="row"><button id="bl">（</button><button id="br">）</button></div>
 <div class="row"><button id="undo">退一步</button><button id="clr">清除</button><button id="ok">確認</button></div><div id="msg"></div><div id="nb"></div></div>
 <button id="help">【遊戲說明】</button>
-</aside></div>
+</div><div id="eside" style="display:none"><div class="card" style="font-size:min(3vh,1.5vw);line-height:1.7"><b>🔬 元素認識</b><br>點選週期表上的任一個元素，會出現全螢幕的元素介紹，可以用「上一個／下一個」連續瀏覽。<br>有<span style="color:#d89a00;font-weight:700">金色框</span>的元素，已經有介紹內容。</div></div></aside></div>
 <div id="ovl"></div>
 <script>
 const E="H氫1,He氦4,Li鋰7,Be鈹9,B硼11,C碳12,N氮14,O氧16,F氟19,Ne氖20,Na鈉23,Mg鎂24,Al鋁27,Si矽28,P磷31,S硫32,Cl氯35,Ar氬40,K鉀39,Ca鈣40,Sc鈧45,Ti鈦48,V釩51,Cr鉻52,Mn錳55,Fe鐵56,Co鈷59,Ni鎳59,Cu銅64,Zn鋅65,Ga鎵70,Ge鍺73,As砷75,Se硒79,Br溴80,Kr氪84,Rb銣85,Sr鍶88,Y釔89,Zr鋯91,Nb鈮93,Mo鉬96,Tc鎝98,Ru釕101,Rh銠103,Pd鈀106,Ag銀108,Cd鎘112,In銦115,Sn錫119,Sb銻122,Te碲128,I碘127,Xe氙131,Cs銫133,Ba鋇137,La鑭139,Ce鈰140,Pr鐠141,Nd釹144,Pm鉕145,Sm釤150,Eu銪152,Gd釓157,Tb鋱159,Dy鏑163,Ho鈥165,Er鉺167,Tm銩169,Yb鐿173,Lu鎦175,Hf鉿178,Ta鉭181,W鎢184,Re錸186,Os鋨190,Ir銥192,Pt鉑195,Au金197,Hg汞201,Tl鉈204,Pb鉛207,Bi鉍209,Po釙209,At砈210,Rn氡222,Fr鍅223,Ra鐳226,Ac錒227,Th釷232,Pa鏷231,U鈾238,Np錼237,Pu鈽244,Am鋂243,Cm鋦247,Bk鉳247,Cf鐦251,Es鑀252,Fm鐨257,Md鍆258,No鍩259,Lr鐒266,Rf鑪267,Db𨧀268,Sg𨭎269,Bh𨨏270,Hs𨭆277,Mt䥑278,Ds鐽281,Rg錀282,Cn鎶285,Nh鉨286,Fl鈇289,Mc鏌290,Lv鉝293,Ts鿬294,Og鿫294";
@@ -66,7 +76,7 @@ const EL={};E.split(',').forEach((s,i)=>{const m=s.match(/^([A-Za-z]+)(\D+?)(\d+
 const S=a=>new Set(a),CS=[[S([3,11,19,37,55,87]),'c1'],[S([4,12,20,38,56,88]),'c2'],[S([13,31,49,50,81,82,83,84,113,114,115,116]),'c4'],[S([5,14,32,33,51,52]),'c5'],[S([1,6,7,8,15,16,34]),'c6'],[S([9,17,35,53,85,117]),'c7'],[S([2,10,18,36,54,86,118]),'c8']];
 function cat(z){for(const[s,c]of CS)if(s.has(z))return c;return z>=57&&z<=71?'c9':z>=89&&z<=103?'c10':'c3'}
 function pos(z){if(z==1)return[1,1];if(z==2)return[1,18];if(z<=4)return[2,z-2];if(z<=10)return[2,z+8];if(z<=12)return[3,z-10];if(z<=18)return[3,z];if(z<=36)return[4,z-18];if(z<=54)return[5,z-36];if(z<=56)return[6,z-54];if(z<=71)return[9,z-54];if(z<=86)return[6,z-68];if(z<=88)return[7,z-86];if(z<=103)return[10,z-86];return[7,z-100]}
-const BT={};for(const[s,e]of Object.entries(EL)){const b=document.createElement('button'),[r,c]=pos(e.z);BT[s]=b;b.className='el '+cat(e.z);b.style.gridRow=r;b.style.gridColumn=c;b.innerHTML='<span class="r1"><i>'+e.zh+'</i><span class="rb"><u>'+e.z+'</u><b>'+s+'</b></span></span><span class="r2"><em>'+e.zy+'</em><s>'+e.m+'</s></span>';b.onclick=()=>press(s);$('pt').appendChild(b)}
+const BT={};for(const[s,e]of Object.entries(EL)){const b=document.createElement('button'),[r,c]=pos(e.z);BT[s]=b;b.className='el '+cat(e.z);b.style.gridRow=r;b.style.gridColumn=c;b.innerHTML='<span class="r1"><i>'+e.zh+'</i><span class="rb"><u>'+e.z+'</u><b>'+s+'</b></span></span><span class="r2"><em>'+e.zy+'</em><s>'+e.m+'</s></span>';b.onclick=()=>MODE=='e'?showEl(s):press(s);$('pt').appendChild(b)}
 [[6,'鑭系','c9'],[7,'錒系','c10']].forEach(([r,t,c])=>{const d=document.createElement('div');d.className='ph '+c;d.style.gridRow=r;d.style.gridColumn=3;d.textContent=t;$('pt').appendChild(d)});
 {const c=EL.Cr,d=document.createElement('div');d.id='info';d.innerHTML='<div id="demo"><div class="lb l"><span>中文名稱</span><span>注音</span></div><div class="el c3 demo"><span class="r1"><i>'+c.zh+'</i><span class="rb"><u>'+c.z+'</u><b>Cr</b></span></span><span class="r2"><em>'+c.zy+'</em><s>'+c.m+'</s></span></div><div class="lb r"><span>元素符號</span><span>原子序</span><span>原子量</span></div></div><div id="lg">'+[['c1','鹼金屬'],['c2','鹼土金屬'],['c3','過渡金屬'],['c4','其他金屬'],['c5','類金屬'],['c6','非金屬'],['c7','鹵素'],['c8','惰性氣體'],['c9','鑭系元素'],['c10','錒系元素']].map(a=>'<div><i class="'+a[0]+'"></i>'+a[1]+'</div>').join('')+'</div>';$('pt').appendChild(d)}
 // ---- 化學式解析 ----
@@ -185,6 +195,82 @@ function importRows(rows){if(rows.length&&String(rows[0][0]||'').includes('中�
  if(!add.length){alert('沒有可匯入的題目，請確認欄位：中文名稱、化學式、難易、提示、說明');return}
  if(confirm('讀到 '+add.length+' 題'+(bad.length?'（略過 '+bad.length+' 題化學式有誤：'+bad.slice(0,5).join('、')+'）':'')+'。\n按「確定」＝取代現有題庫\n按「取消」＝加到現有題庫後面'))D.bank=add;else D.bank=D.bank.concat(add);save();tpanel()}
 // ---- end Excel ----
+
+const INTRO={
+H:['Hydrogen','氣體','宇宙中最多、最輕的元素。','氫氣可當燃料電池的燃料，也用來製造氨。','氫氣燃燒只會產生水；水（H₂O）就含有氫。'],
+He:['Helium','氣體','第二輕的氣體，性質穩定、不易和其他物質反應。','灌氣球和飛行船、低溫冷卻（例如核磁共振儀）。','吸入氦氣說話聲音會變尖，因為聲音在氦氣中傳得比較快。'],
+Li:['Lithium','固體','最輕的金屬，密度比水小，可以浮在水上。','手機、筆電和電動車的鋰電池。','鋰很軟，可以用小刀切開；火焰是紅色。'],
+C:['Carbon','固體','構成生命的基本元素，有機物都含有碳。','鉛筆芯（石墨）、鑽石、木炭、活性碳。','石墨和鑽石都由碳組成，但原子排列不同，所以性質差很多。'],
+N:['Nitrogen','氣體','約占空氣體積的 78%，性質穩定。','製造肥料、食品包裝充氮防腐、液態氮冷凍。','氮是蛋白質和 DNA 的重要成分，植物需要氮肥才長得好。'],
+O:['Oxygen','氣體','約占空氣體積的 21%，能幫助燃燒、供生物呼吸。','呼吸、醫療用氧氣、金屬焊接與切割。','氧是地殼中含量最多的元素。'],
+F:['Fluorine','氣體','淡黃色、有毒的氣體，是反應性最強的非金屬之一。','牙膏中的氟化物可以預防蛀牙，鐵氟龍不沾鍋塗層也含氟。','氟是電負度最大的元素，幾乎能和所有元素反應。'],
+Ne:['Neon','氣體','無色、性質穩定的稀有氣體（惰性氣體）。','霓虹燈：通電後會發出紅橘色的光。','霓虹燈的英文 neon sign，名字就來自氖。'],
+Na:['Sodium','固體','很軟的銀白色金屬，遇水會劇烈反應，要保存在煤油中。','食鹽（氯化鈉）的成分、鈉蒸氣街燈。','鈉的火焰是黃色；人體神經傳導也需要鈉離子。'],
+Mg:['Magnesium','固體','輕的銀白色金屬，燃燒時會發出耀眼的白光。','輕合金（筆電外殼、自行車）、煙火與閃光燈。','植物的葉綠素中心含有鎂。'],
+Al:['Aluminium','固體','輕、不易生鏽、導熱導電都很好的銀白色金屬。','鋁罐、鋁箔、鋁門窗、飛機機身。','鋁是地殼中含量最多的金屬元素，而且很容易回收再利用。'],
+Si:['Silicon','固體','類金屬，是重要的半導體材料。','電腦晶片、太陽能電池；沙子和玻璃的主要成分是二氧化矽。','矽是地殼中含量第二多的元素。'],
+P:['Phosphorus','固體','白磷在空氣中會自燃，紅磷比較穩定。','肥料、火柴盒側面的紅磷。','骨骼和牙齒含有磷酸鈣，DNA 也含有磷。'],
+S:['Sulfur','固體','黃色的粉末，燃燒時產生有刺激性氣味的二氧化硫。','製造硫酸、橡膠硫化、火藥。','溫泉的特殊氣味和火山口的黃色結晶，都和硫有關。'],
+Cl:['Chlorine','氣體','黃綠色、有刺激性氣味的有毒氣體。','游泳池和自來水消毒、製造鹽酸、PVC 塑膠。','食鹽（NaCl）就是由鈉和氯組成。'],
+Ar:['Argon','氣體','稀有氣體，約占空氣體積的 0.93%。','燈泡的填充氣體、金屬焊接的保護氣體。','氬是空氣中含量第三多的氣體，僅次於氮和氧。'],
+K:['Potassium','固體','很活潑的銀白色金屬，遇水會劇烈反應。','肥料三要素（氮、磷、鉀）之一；香蕉等食物含有鉀。','鉀的火焰是淡紫色；人體的神經和肌肉需要鉀離子。'],
+Ca:['Calcium','固體','銀白色的金屬，在自然界多以化合物存在。','骨骼和牙齒、蛋殼和貝殼（碳酸鈣）、石灰、水泥。','鈣是人體中含量最多的金屬元素。'],
+Fe:['Iron','固體','最常使用的金屬，具有磁性。','鋼筋、鐵鍋、車輛和機器；血液中的血紅素含有鐵，能運送氧氣。','鐵在潮濕的空氣中會生鏽，成為氧化鐵。'],
+Cu:['Copper','固體','紅橙色的金屬，導電、導熱都很好。','電線、水管、硬幣、烹調用的銅鍋。','銅在空氣中放久了，表面會長出綠色的銅綠。'],
+Zn:['Zinc','固體','藍白色的金屬，不易生鏽。','鍍鋅鐵皮（防鏽）、乾電池外殼、黃銅合金。','鋅是人體需要的微量元素。'],
+Ag:['Silver','固體','導電、導熱最好的金屬。','飾品、餐具、電子產品、鏡子的反光層。','銀遇到含硫的物質會變黑，變成硫化銀。'],
+Au:['Gold','固體','黃色的金屬，化學性質穩定，不容易生鏽。','金飾、電子零件、貨幣儲備。','金的延展性很好，可以打成非常薄的金箔。'],
+Hg:['Mercury','液體','唯一在常溫下是液體的金屬，有毒。','過去用於溫度計與日光燈管。','汞蒸氣有毒，溫度計破掉時要小心處理，不能直接用手碰。'],
+Pb:['Lead','固體','柔軟、密度大的灰色金屬，有毒。','汽車電瓶、輻射防護。','過去的汽油和油漆含鉛，因為對健康有害，現在已大幅禁用。'],
+I:['Iodine','固體','紫黑色的固體，加熱會直接變成紫色的氣體（昇華）。','碘酒消毒、加碘鹽；人體的甲狀腺需要碘。','碘遇到澱粉會變成藍黑色，常用來檢驗澱粉。'],
+Sn:['Tin','固體','銀白色、柔軟的金屬。','馬口鐵（鍍錫的鐵皮罐頭）、焊錫。','錫和鉛的合金常用來做焊料，現在多改用無鉛焊錫。'],
+Ni:['Nickel','固體','銀白色、有磁性的金屬。','硬幣、不鏽鋼、充電電池。','不鏽鋼含有鎳和鉻，所以不容易生鏽。'],
+B:['Boron','固體','類金屬，黑褐色、又硬又脆。','硼砂、耐熱玻璃（硼矽酸玻璃）。','硼是植物生長需要的微量元素；硼的火焰是綠色。'],
+Ti:['Titanium','固體','強度高、重量輕、不易腐蝕的銀灰色金屬。','眼鏡架、人工關節與牙根、飛機、球拍。','鈦和人體相容性好，不容易引起排斥，所以常用在植入物；二氧化鈦是白色的顏料。'],
+Cr:['Chromium','固體','銀白色、很硬的金屬。','鍍鉻（水龍頭、汽車的亮面零件）、不鏽鋼。','名稱來自希臘文「顏色」，因為鉻的化合物有很多種顏色；紅寶石的紅色就來自鉻。'],
+Mn:['Manganese','固體','灰白色、硬而脆的金屬。','加入鋼鐵中增加硬度與耐磨性；二氧化錳用在乾電池。','紫色的過錳酸鉀可以用來消毒。'],
+Co:['Cobalt','固體','銀灰色、有磁性的金屬。','鋰電池的電極材料、合金、藍色顏料與陶瓷釉料。','鈷藍是自古使用的藍色顏料；維生素 B12 也含有鈷。'],
+Ga:['Gallium','固體','柔軟的銀白色金屬，熔點只有約 30 °C。','LED（氮化鎵）、半導體元件。','把鎵放在手心就會慢慢融化成液體。'],
+As:['Arsenic','固體','類金屬，化合物多有毒。','半導體材料（砷化鎵）；過去也用在木材防腐劑，現在已受限制。','台灣西南沿海地區曾因飲用含砷的地下水而發生烏腳病。'],
+Br:['Bromine','液體','紅棕色、容易揮發、有刺激性臭味的有毒液體。','阻燃劑，以及藥物與染料的原料。','常溫下是液體的元素只有溴和汞。'],
+Cd:['Cadmium','固體','柔軟的銀白色金屬，有毒。','鎳鎘電池、金屬鍍層、顏料。','鎘會累積在人體內；日本曾因鎘汙染稻米，造成痛痛病。'],
+W:['Tungsten','固體','熔點最高的金屬，約 3422 °C。','傳統燈泡的燈絲、切削工具（碳化鎢）。','鎢的元素符號 W，來自它的德文名稱 Wolfram。'],
+Ir:['Iridium','固體','密度很大、極耐腐蝕的銀白色貴金屬。','火星塞電極、高級筆尖。','恐龍滅絕時期的地層中銥含量異常高，是「小行星撞擊地球」假說的重要證據。'],
+U:['Uranium','固體','具有放射性的重金屬。','核能發電的燃料。','鈾-235 可以發生核分裂；天然鈾大部分是鈾-238。']
+};
+const CATN={c1:'鹼金屬',c2:'鹼土金屬',c3:'過渡金屬',c4:'其他金屬',c5:'類金屬',c6:'非金屬',c7:'鹵素',c8:'惰性氣體',c9:'鑭系元素',c10:'錒系元素'};
+let EO={};try{EO=JSON.parse(localStorage.getItem('chemEl1'))||{}}catch(e){}
+const saveEO=()=>{try{localStorage.setItem('chemEl1',JSON.stringify(EO))}catch(e){}};
+const hasInfo=s=>!!(INTRO[s]||EO[s]);
+function getInfo(s){const o=EO[s],b=INTRO[s];if(o)return o;if(b)return{en:b[0],st:b[1],d:b[2],u:b[3],f:b[4],src:''};return{en:'',st:'',d:'',u:'',f:'',src:''}}
+function markStars(){Object.keys(BT).forEach(s=>BT[s].classList.toggle('has',hasInfo(s)))}
+// 圖片（IndexedDB）
+const idb=()=>new Promise((ok,no)=>{const r=indexedDB.open('chemEl',1);r.onupgradeneeded=()=>r.result.createObjectStore('img');r.onsuccess=()=>ok(r.result);r.onerror=no});
+async function imgGet(k){try{const d=await idb();return await new Promise(ok=>{const q=d.transaction('img').objectStore('img').get(k);q.onsuccess=()=>ok(q.result||[]);q.onerror=()=>ok([])})}catch(e){return[]}}
+async function imgSet(k,v){try{const d=await idb();await new Promise(ok=>{const t=d.transaction('img','readwrite');t.objectStore('img').put(v,k);t.oncomplete=ok;t.onerror=ok})}catch(e){}}
+const resize=f=>new Promise((ok,no)=>{const im=new Image(),u=URL.createObjectURL(f);im.onload=()=>{const m=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*m);c.height=Math.round(im.height*m);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(c.toDataURL('image/jpeg',.82))};im.onerror=no;im.src=u});
+// 模式切換
+let MODE='q';
+function setMode(m){MODE=m;$('pt').classList.toggle('em',m=='e');$('mQ').classList.toggle('on',m=='q');$('mE').classList.toggle('on',m=='e');$('qside').style.display=m=='q'?'':'none';$('eside').style.display=m=='e'?'':'none';$('list').style.display=m=='q'?'':'none'}
+$('mQ').onclick=()=>setMode('q');$('mE').onclick=()=>setMode('e');
+// 全螢幕元素介紹
+const KS=Object.keys(EL);
+async function showEl(sym,back){const e=EL[sym],i=getInfo(sym),imgs=await imgGet(sym),cn=cat(e.z),ix=e.z-1;
+ const rel=D.bank.map(q=>({q,r:parseF(q.f)})).filter(x=>x.r.items&&flat(x.r.items).includes(sym)).slice(0,10);
+ const sec=(t,x)=>x?'<h3>'+t+'</h3><p>'+esc(x).replace(/\\n/g,'<br>')+'</p>':'';
+ const body=sec('簡介',i.d)+sec('生活用途',i.u)+sec('小知識',i.f);
+ $('ovl').innerHTML='<div class="ec"><div class="ect"><button id="ecp">◀ 上一個</button><b>🔬 元素認識</b><button id="ecn">下一個 ▶</button><button id="ecx">✕ 關閉</button></div><div class="ecb"><div class="ecl"><div class="el demo big '+cn+'"><span class="r1"><i>'+e.zh+'</i><span class="rb"><u>'+e.z+'</u><b>'+sym+'</b></span></span><span class="r2"><em>'+e.zy+'</em><s>'+e.m+'</s></span></div><div class="imgs">'+(imgs.length?imgs.map(x=>'<img src="'+x+'">').join(''):'<div class="noimg">（尚無圖片，老師可在老師模式上傳）</div>')+'</div>'+(i.src&&imgs.length?'<div class="src">圖片來源：'+esc(i.src)+'</div>':'')+'</div><div class="ecr"><h1>'+e.zh+' <small>'+esc(i.en)+'</small></h1><div><span class="chip '+cn+'">'+CATN[cn]+'</span><span class="chip">原子序 '+e.z+'</span><span class="chip">原子量 '+e.m+'</span>'+(i.st?'<span class="chip">常溫：'+esc(i.st)+'</span>':'')+'</div>'+(body||'<p style="color:#777">（這個元素還沒有介紹。老師可以在「老師模式 → 元素介紹」新增。）</p>')+(rel.length?'<h3>常見物質</h3>'+rel.map(x=>'<span class="chip">'+fh(x.r.items)+' '+esc(x.q.n)+'</span>').join(''):'')+'</div></div></div>';
+ $('ecp').onclick=()=>showEl(KS[(ix+117)%118],back);$('ecn').onclick=()=>showEl(KS[(ix+1)%118],back);$('ecx').onclick=()=>{$('ovl').innerHTML='';if(back)elPanel(sym)};sfx([660],.06,'triangle',.06)}
+// 老師：編輯元素介紹
+async function elPanel(sym){sym=typeof sym=='string'?sym:'O';const i=getInfo(sym);let ims=await imgGet(sym);
+ $('ovl').innerHTML='<div class="ov"><div class="box"><h3>🔬 編輯元素介紹與圖片</h3>選擇元素：<select id="es">'+KS.map(k=>'<option value="'+k+'"'+(k==sym?' selected':'')+'>'+EL[k].z+' '+k+' '+EL[k].zh+(hasInfo(k)?' ★':'')+'</option>').join('')+'</select> <small>★＝已有介紹（修改後要先按「儲存」再換元素）</small><br>英文名稱<input id="ee" style="width:180px" value="'+esc(i.en)+'"> 常溫狀態<select id="est"><option></option><option>固體</option><option>液體</option><option>氣體</option></select><br>簡介<br><textarea id="ed" rows="2">'+esc(i.d)+'</textarea><br>生活用途<br><textarea id="eu" rows="2">'+esc(i.u)+'</textarea><br>小知識<br><textarea id="ef" rows="2">'+esc(i.f)+'</textarea><br>圖片（最多 3 張，會自動縮小）：<input type="file" id="efi" accept="image/*" multiple><div id="eim"></div>圖片來源<input id="esr" style="width:70%" value="'+esc(i.src||'')+'" placeholder="例如：老師自行拍攝／網址或作者"><div id="emsg" class="good"></div><hr><button id="esv" style="background:#e8f5e9">儲存</button><button id="epv">儲存並預覽</button><button id="erst">清除此元素的自訂內容與圖片</button><button id="ebk" style="float:right">回題庫設定</button></div></div>';
+ $('est').value=i.st||'';const draw=()=>{$('eim').innerHTML=ims.map((x,k)=>'<span class="thumb"><img src="'+x+'"><button data-k="'+k+'">刪除</button></span>').join('')||'<small>（尚無圖片）</small>'};draw();
+ $('eim').onclick=async e=>{const k=e.target.dataset.k;if(k===undefined)return;ims.splice(+k,1);await imgSet(sym,ims);draw()};
+ $('efi').onchange=async e=>{for(const f of [...e.target.files]){if(ims.length>=3){$('emsg').textContent='最多 3 張，其餘略過';break}try{ims.push(await resize(f))}catch(x){}}await imgSet(sym,ims);e.target.value='';draw()};
+ const save=()=>{EO[sym]={en:$('ee').value.trim(),st:$('est').value,d:$('ed').value.trim(),u:$('eu').value.trim(),f:$('ef').value.trim(),src:$('esr').value.trim()};saveEO();markStars();$('emsg').textContent='✅ 已儲存'};
+ $('esv').onclick=save;$('epv').onclick=()=>{save();showEl(sym,true)};
+ $('erst').onclick=async()=>{if(!confirm('確定清除 '+EL[sym].zh+' 的自訂內容與圖片？（內建介紹會還原）'))return;delete EO[sym];saveEO();await imgSet(sym,[]);markStars();elPanel(sym)};
+ $('ebk').onclick=tpanel;$('es').onchange=()=>elPanel($('es').value)}
 // ---- 老師模式 ----
 let ed=-1;
 $('tb').onclick=()=>{$('ovl').innerHTML='<div class="ov"><div class="box"><h3>老師模式</h3><input id="pw" type="password" placeholder="密碼"><button id="pwo">進入</button><button id="pwx">取消</button><div id="pwm" class="bad"></div></div></div>';
@@ -196,7 +282,7 @@ function tpanel(){ed=-1;$('ovl').innerHTML=`<div class="ov"><div class="box"><h3
 <li><b>原子團</b>：括號裡的原子團必須在「原子團」清單中。需要新的，在欄位輸入如 ClO3，按「新增原子團」。</li>
 <li><b>出題設定</b>：選出題範圍（全部、只考基本、只考進階、只考自訂題），並設定每局題數與其中的進階題數（範圍選「全部」時才依此分配）。改完要按最下方「完成並重新開始」才會套用。</li>
 <li><b>Excel 匯出匯入</b>：「匯出題庫（Excel）」會下載 化學式題庫.xlsx，欄位依序是中文名稱、化學式、難易（易/難）、提示、說明，第一列是標題。在 Excel 修改存檔後，按「匯入題庫」選檔案，跳出視窗時按「確定」＝取代現有題庫、按「取消」＝加到現有題庫後面。也可匯入 CSV。</li>
-<li><b>備份提醒</b>：題庫存在這台電腦的這個瀏覽器裡，換電腦或清除瀏覽器資料就會消失，請定期匯出備份。「還原預設題庫」會刪除所有自訂題。</li></ol></details>出題範圍：<select id="rg"><option value="all">全部</option><option value="easy">只考基本（易）</option><option value="hard">只考進階（難）</option><option value="custom">只考自訂題</option></select>　每局<input id="nn" type="number" min="1" max="20" style="width:64px">題，其中進階<input id="nh" type="number" min="0" max="20" style="width:64px">題<small>（範圍選「全部」時依此分配）</small>
+<li><b>備份提醒</b>：題庫存在這台電腦的這個瀏覽器裡，換電腦或清除瀏覽器資料就會消失，請定期匯出備份。「還原預設題庫」會刪除所有自訂題。</li></ol></details><div style="margin:4px 0"><button id="tel" style="background:#e8f5e9">🔬 元素認識：編輯元素介紹與圖片</button></div>出題範圍：<select id="rg"><option value="all">全部</option><option value="easy">只考基本（易）</option><option value="hard">只考進階（難）</option><option value="custom">只考自訂題</option></select>　每局<input id="nn" type="number" min="1" max="20" style="width:64px">題，其中進階<input id="nh" type="number" min="0" max="20" style="width:64px">題<small>（範圍選「全部」時依此分配）</small>
 <hr><b id="ft">新增題目</b><br><input id="tn" placeholder="中文名稱，如 硫酸鋁"><input id="tf" placeholder="化學式，如 Al2(SO4)3"><select id="td"><option>易</option><option>難</option></select><input id="th" placeholder="提示（可空白）"><br><input id="te" placeholder="說明內容（答對後顯示，可空白）" style="width:90%"><button id="ta">新增</button><div id="tp" style="font-size:20px;min-height:28px"></div>
 <hr><b>題庫</b><table id="tl"></table><hr><b>原子團</b>（寫法如 SO4）：<span id="tg2"></span><br><input id="gi" placeholder="新增原子團，如 ClO3"><button id="ga">新增原子團</button><div id="gm" class="bad"></div>
 <hr><button id="ex">匯出題庫（Excel）</button><label><button onclick="this.nextSibling.click()">匯入題庫（Excel／CSV）</button><input type="file" id="im" accept=".xlsx,.csv,.json" style="display:none"></label><button id="rs">還原預設題庫</button><button id="tc" style="float:right;background:#2e7d32;color:#fff">完成並重新開始</button></div></div>`;
@@ -211,10 +297,11 @@ function tpanel(){ed=-1;$('ovl').innerHTML=`<div class="ov"><div class="box"><h3
   else{let t;try{t=new TextDecoder('utf-8',{fatal:true}).decode(buf)}catch(x){t=new TextDecoder('big5').decode(buf)}rows=csvRows(t.replace(/^\uFEFF/,''))}
   importRows(rows)}catch(x){alert('讀不到檔案，請確認是 .xlsx 或 .csv 檔')}e.target.value=''};
  $('rs').onclick=()=>{if(confirm('確定還原預設題庫？自訂題會消失')){localStorage.removeItem(K);location.reload()}};
- $('tc').onclick=run;tlist()}
+ $('tc').onclick=run;$('tel').onclick=()=>elPanel();tlist()}
 function pv(){const f=$('tf').value,r=parseF(f);$('tp').innerHTML=!f?'':r.err?'<span class="bad">'+r.err+'</span>':fh(r.items)+'　分子量 '+mass(r.items)+'　按鍵：'+r.items.map(x=>x.t=='g'?'['+x.v+']':x.v).join(' ')}
 function tlist(){$('tg2').innerHTML=D.groups.map(gh).join('、');$('tl').innerHTML=D.bank.map((q,i)=>'<tr><td>'+esc(q.n)+'</td><td>'+esc(q.f)+'</td><td>'+q.d+(q.c?' ★':'')+'</td><td><button data-e="'+i+'">編輯</button><button data-d="'+i+'">刪除</button></td></tr>').join('');
  $('tl').onclick=e=>{const t=e.target.dataset;if(t.d!==undefined){D.bank.splice(+t.d,1);save();tlist()}if(t.e!==undefined){ed=+t.e;const q=D.bank[ed];$('tn').value=q.n;$('tf').value=q.f;$('td').value=q.d;$('th').value=q.h;$('te').value=q.e||'';$('ta').textContent='更新';$('ft').textContent='編輯題目';pv()}}}
+markStars();
 function fitTiles(){const R=document.documentElement.style;let k=1.3;R.setProperty('--k',k);for(let n=0;n<4;n++){let w=0;document.querySelectorAll('#pt .el:not(.demo)').forEach(e=>{const r1=e.querySelector('.r1'),bb=r1.querySelector('b');bb.style.marginLeft='';bb.style.marginLeft=(-.2*bb.offsetWidth)+'px';const need=r1.children[0].getBoundingClientRect().width+r1.children[1].getBoundingClientRect().width,have=e.clientWidth-parseFloat(getComputedStyle(e).paddingLeft)*2;w=Math.max(w,need/have)});if(w<=1)break;k=Math.max(1,k/w*.98);R.setProperty('--k',k)}}
 addEventListener('resize',fitTiles);fitTiles();
 run();
