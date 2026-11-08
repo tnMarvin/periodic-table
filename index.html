@@ -195,7 +195,7 @@ function login(){$('ovl').innerHTML='<div class="ov"><div class="box" style="tex
  $('nks').onclick=()=>{NICK='';SKIP=true;try{localStorage.removeItem('chemNick')}catch(e){}$('ovl').innerHTML='';whoRender()}}
 const rankHtml=j=>{const f=(k,l)=>j.rank&&j.rank[k]?l+'第 <b>'+j.rank[k]+'</b> 名／'+j.n[k]+' 人':'';return '🏆 '+[f('all','總榜'),f('q','化學式榜'),f('g','認識元素榜')].filter(Boolean).join('　')+'<br><small>你的平均：'+(j.avg/1000).toFixed(1)+' 秒／次（累積 '+j.count+' 次）</small>'};
 async function submitScore(kind,ms,box){if(!GAS){box.textContent='';return}if(!NICK){box.textContent='（未登錄暱稱，成績不會上傳）';return}box.textContent='成績上傳中…';
- try{const r=await fetch(GAS,{method:'POST',body:JSON.stringify({action:'submit',nick:NICK,kind,ms:Math.round(ms)})}),j=await r.json();if(!j.ok)throw j.err;box.innerHTML=rankHtml(j)}catch(e){box.textContent='成績上傳失敗（'+e+'），請檢查網路後再試'}}
+                                        try{const r=await fetch(GAS,{method:'POST',mode:'cors',redirect:'follow',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'submit',nick:NICK,kind,ms:Math.round(ms)})}),j=await r.json();if(!j.ok)throw j.err;box.innerHTML=rankHtml(j)}catch(e){box.textContent='成績上傳失敗（'+e+'），請檢查網路後再試'}}
 async function showBoard(tab){tab=tab||'all';$('ovl').innerHTML='<div class="ov"><div class="box" id="bx">載入中…</div></div>';
  try{const r=await fetch(GAS+(GAS.includes('?')?'&':'?')+'action=board',{cache:'no-store'}),j=await r.json();if(!j.ok)throw j.err;drawBoard(j,tab)}catch(e){$('bx').innerHTML='讀取排行榜失敗（'+esc(e)+'）<br><button onclick="$(\'ovl\').innerHTML=\'\'">關閉</button>'}}
 function drawBoard(j,tab){const fm=ms=>(ms/1000).toFixed(1),cell=(T,N)=>N?fm(T)+' 秒／'+N+' 次':'—',rows=(j[tab]||[]).slice(0,30);
