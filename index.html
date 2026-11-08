@@ -58,15 +58,19 @@ table{border-collapse:collapse;width:100%;font-size:14px}td{border-bottom:1px so
 .chip{display:inline-block;padding:.05em .7em;border-radius:1em;margin:0 .4em .3em 0;border:1px solid rgba(0,0,0,.25);font-size:.75em;background:#fff}
 .imgs{display:flex;gap:1vw;flex:1;min-height:0;width:100%;justify-content:center;align-items:center}.imgs img{max-height:100%;max-width:48%;object-fit:contain;border-radius:8px;border:1px solid #ccc;background:#fff}.noimg{border:2px dashed #aab;border-radius:10px;color:#889;padding:2vh 2vw;font-size:min(2.4vh,1.4vw)}.src{font-size:min(2vh,1.2vw);color:#666}
 #ovl .box textarea{width:96%;font-size:15px;padding:5px;margin:3px;border:1px solid #9aa7c7;border-radius:6px;font-family:inherit}.thumb{display:inline-block;margin:4px;text-align:center}.thumb img{height:90px;border:1px solid #aaa;border-radius:6px;display:block}
+#timer{text-align:center;font-size:min(3vh,1.7vw)}#tv{font-size:1.7em;font-variant-numeric:tabular-nums;color:#27408b}#who{font-size:min(2vh,1.1vw);color:#555}#who button{font-size:1em;border:1px solid #9aa7c7;border-radius:6px;background:#eef2ff;padding:0 .5em;margin-left:.3em}
+#gq{font-size:min(2.5vh,1.25vw);line-height:1.5}.gh{font-weight:700;font-size:1.15em;color:#27408b;margin-bottom:.3em}.gh small{font-weight:400;color:#666}.gc{margin:.5em 0;padding:.3em .6em;background:#f6f8ff;border-left:4px solid #27408b;border-radius:4px}.gc b{color:#27408b}.gc p{margin:0}
+.el.wrong{animation:wr .45s}@keyframes wr{50%{background:#ff8a80}}
+#ovl table{border-collapse:collapse;width:100%;font-size:18px}#ovl th,#ovl td{border-bottom:1px solid #ddd;padding:5px 8px;text-align:left}#ovl tr.me td{background:#fff4c2;font-weight:700}.tabs button{font-size:18px;padding:5px 16px}.tabs button.on{background:#27408b;color:#fff}
 </style></head><body>
-<header><h1>⚗️ 化學式組合：依化學式順序點元素</h1><span id="modes"><button id="mQ" class="on">⚗️ 組合分子</button><button id="mE">🔬 元素認識</button></span><span>成就 <b id="cnt">0</b>/<b id="tg">10</b> <button id="snd" title="音效">🔊</button> <button id="tb" title="老師">⚙</button></span></header>
+<header><h1>⚗️ 化學式組合：依化學式順序點元素</h1><span id="modes"><button id="mQ" class="on">⚗️ 組合分子</button><button id="mE">🔬 元素認識</button><button id="mG">🎯 元素挑戰</button><button id="mB" style="display:none">🏆 排行榜</button></span><span>成就 <b id="cnt">0</b>/<b id="tg">10</b> <button id="snd" title="音效">🔊</button> <button id="tb" title="老師">⚙</button></span></header>
 <div id="wrap"><div><div id="pt"></div><div id="list"></div></div><aside><div id="qside">
 <div class="card"><div id="qn"></div><button id="hintb">💡提示</button> <span id="hint"></span></div>
 <div class="card"><div id="seq"></div><div id="gb"></div>
 <div class="row"><button id="bl">（</button><button id="br">）</button></div>
 <div class="row"><button id="undo">退一步</button><button id="clr">清除</button><button id="ok">確認</button></div><div id="msg"></div><div id="nb"></div></div>
 <button id="help">【遊戲說明】</button>
-</div><div id="eside" style="display:none"><div class="card" style="font-size:min(3vh,1.5vw);line-height:1.7"><b>🔬 元素認識</b><br>點選週期表上的任一個元素，會出現全螢幕的元素介紹，可以用「上一個／下一個」連續瀏覽。<br>有<span style="color:#d89a00;font-weight:700">金色框</span>的元素，已經有介紹內容。</div></div></aside></div>
+</div><div id="eside" style="display:none"><div class="card" style="font-size:min(3vh,1.5vw);line-height:1.7"><b>🔬 元素認識</b><br>點選週期表上的任一個元素，會出現全螢幕的元素介紹，可以用「上一個／下一個」連續瀏覽。<br>有<span style="color:#d89a00;font-weight:700">金色框</span>的元素，已經有介紹內容。</div></div><div id="gside" style="display:none"><div class="card" id="gq"></div></div><div class="card" id="timer"><div>⏱ <b id="tv">0.0</b> 秒</div><div id="who"></div></div></aside></div>
 <div id="ovl"></div>
 <script>
 const E="H氫1,He氦4,Li鋰7,Be鈹9,B硼11,C碳12,N氮14,O氧16,F氟19,Ne氖20,Na鈉23,Mg鎂24,Al鋁27,Si矽28,P磷31,S硫32,Cl氯35,Ar氬40,K鉀39,Ca鈣40,Sc鈧45,Ti鈦48,V釩51,Cr鉻52,Mn錳55,Fe鐵56,Co鈷59,Ni鎳59,Cu銅64,Zn鋅65,Ga鎵70,Ge鍺73,As砷75,Se硒79,Br溴80,Kr氪84,Rb銣85,Sr鍶88,Y釔89,Zr鋯91,Nb鈮93,Mo鉬96,Tc鎝98,Ru釕101,Rh銠103,Pd鈀106,Ag銀108,Cd鎘112,In銦115,Sn錫119,Sb銻122,Te碲128,I碘127,Xe氙131,Cs銫133,Ba鋇137,La鑭139,Ce鈰140,Pr鐠141,Nd釹144,Pm鉕145,Sm釤150,Eu銪152,Gd釓157,Tb鋱159,Dy鏑163,Ho鈥165,Er鉺167,Tm銩169,Yb鐿173,Lu鎦175,Hf鉿178,Ta鉭181,W鎢184,Re錸186,Os鋨190,Ir銥192,Pt鉑195,Au金197,Hg汞201,Tl鉈204,Pb鉛207,Bi鉍209,Po釙209,At砈210,Rn氡222,Fr鍅223,Ra鐳226,Ac錒227,Th釷232,Pa鏷231,U鈾238,Np錼237,Pu鈽244,Am鋂243,Cm鋦247,Bk鉳247,Cf鐦251,Es鑀252,Fm鐨257,Md鍆258,No鍩259,Lr鐒266,Rf鑪267,Db𨧀268,Sg𨭎269,Bh𨨏270,Hs𨭆277,Mt䥑278,Ds鐽281,Rg錀282,Cn鎶285,Nh鉨286,Fl鈇289,Mc鏌290,Lv鉝293,Ts鿬294,Og鿫294";
@@ -76,7 +80,7 @@ const EL={};E.split(',').forEach((s,i)=>{const m=s.match(/^([A-Za-z]+)(\D+?)(\d+
 const S=a=>new Set(a),CS=[[S([3,11,19,37,55,87]),'c1'],[S([4,12,20,38,56,88]),'c2'],[S([13,31,49,50,81,82,83,84,113,114,115,116]),'c4'],[S([5,14,32,33,51,52]),'c5'],[S([1,6,7,8,15,16,34]),'c6'],[S([9,17,35,53,85,117]),'c7'],[S([2,10,18,36,54,86,118]),'c8']];
 function cat(z){for(const[s,c]of CS)if(s.has(z))return c;return z>=57&&z<=71?'c9':z>=89&&z<=103?'c10':'c3'}
 function pos(z){if(z==1)return[1,1];if(z==2)return[1,18];if(z<=4)return[2,z-2];if(z<=10)return[2,z+8];if(z<=12)return[3,z-10];if(z<=18)return[3,z];if(z<=36)return[4,z-18];if(z<=54)return[5,z-36];if(z<=56)return[6,z-54];if(z<=71)return[9,z-54];if(z<=86)return[6,z-68];if(z<=88)return[7,z-86];if(z<=103)return[10,z-86];return[7,z-100]}
-const BT={};for(const[s,e]of Object.entries(EL)){const b=document.createElement('button'),[r,c]=pos(e.z);BT[s]=b;b.className='el '+cat(e.z);b.style.gridRow=r;b.style.gridColumn=c;b.innerHTML='<span class="r1"><i>'+e.zh+'</i><span class="rb"><u>'+e.z+'</u><b>'+s+'</b></span></span><span class="r2"><em>'+e.zy+'</em><s>'+e.m+'</s></span>';b.onclick=()=>MODE=='e'?showEl(s):press(s);$('pt').appendChild(b)}
+const BT={};for(const[s,e]of Object.entries(EL)){const b=document.createElement('button'),[r,c]=pos(e.z);BT[s]=b;b.className='el '+cat(e.z);b.style.gridRow=r;b.style.gridColumn=c;b.innerHTML='<span class="r1"><i>'+e.zh+'</i><span class="rb"><u>'+e.z+'</u><b>'+s+'</b></span></span><span class="r2"><em>'+e.zy+'</em><s>'+e.m+'</s></span>';b.onclick=()=>MODE=='e'?showEl(s):MODE=='g'?gAnswer(s):press(s);$('pt').appendChild(b)}
 [[6,'鑭系','c9'],[7,'錒系','c10']].forEach(([r,t,c])=>{const d=document.createElement('div');d.className='ph '+c;d.style.gridRow=r;d.style.gridColumn=3;d.textContent=t;$('pt').appendChild(d)});
 {const c=EL.Cr,d=document.createElement('div');d.id='info';d.innerHTML='<div id="demo"><div class="lb l"><span>中文名稱</span><span>注音</span></div><div class="el c3 demo"><span class="r1"><i>'+c.zh+'</i><span class="rb"><u>'+c.z+'</u><b>Cr</b></span></span><span class="r2"><em>'+c.zy+'</em><s>'+c.m+'</s></span></div><div class="lb r"><span>元素符號</span><span>原子序</span><span>原子量</span></div></div><div id="lg">'+[['c1','鹼金屬'],['c2','鹼土金屬'],['c3','過渡金屬'],['c4','其他金屬'],['c5','類金屬'],['c6','非金屬'],['c7','鹵素'],['c8','惰性氣體'],['c9','鑭系元素'],['c10','錒系元素']].map(a=>'<div><i class="'+a[0]+'"></i>'+a[1]+'</div>').join('')+'</div>';$('pt').appendChild(d)}
 // ---- 化學式解析 ----
@@ -112,12 +116,12 @@ $('help').onclick=()=>{$('ovl').innerHTML=`<div class="ov" onclick="$('ovl').inn
 <li><b>原子團</b>：遇到括號，先按「（」，點出原子團裡的原子，再按「）」。做好的原子團會自動放進化學式，需要幾個，就再按粉紅色按鈕。例如 Ca(OH)<sub>2</sub>，先做一個 OH，再按一次粉紅色的 OH。</li>
 <li><b>確認</b>：按「確認」。答對，新物質會飛進格子；答錯可以再試。</li>
 <li><b>過關</b>：湊滿格子就過關。點已完成的格子，可以再看物質說明。</li></ol>
-<p style="margin:.5em 0 0"><b>小提醒</b>：點錯按「退一步」，想重來按「清除」。</p>
+<p style="margin:.5em 0 0"><b>🎯 元素挑戰</b>：看右邊的兩段線索，點週期表上對應的元素；答對會飛進下方格子，湊滿即過關。</p><p style="margin:.5em 0 0"><b>⏱ 計時與排行榜</b>：右下角顯示答題時間（不含動畫）。登錄暱稱後，過關成績會上傳到排行榜。</p><p style="margin:.5em 0 0"><b>小提醒</b>：點錯按「退一步」，想重來按「清除」。</p>
 <div style="text-align:center;margin-top:.6em"><button style="font-size:1em;padding:.3em 1.6em">知道了</button></div></div></div>`};
 function info(q){$('ovl').innerHTML=`<div class="ov" onclick="$('ovl').innerHTML=''"><div class="box" style="text-align:center"><div class="nb" style="animation:none;font-size:22px"><div class="f">${fh(q.items)}</div>${esc(q.n)}　分子量 ${mass(q.items)}</div><p style="font-size:22px">${esc(q.e||'')}</p><small>點一下關閉</small></div></div>`}
 function run(){const A=pool(),T=Math.max(1,D.n||10),sh=a=>a.sort(()=>Math.random()-.5);let L;
  if(D.range=='all'){const H=sh(A.filter(q=>q.d=='難')),Ez=sh(A.filter(q=>q.d!='難')),nh=Math.min(D.nh,H.length,T),ne=Math.min(T-nh,Ez.length);L=H.slice(0,nh).concat(Ez.slice(0,ne));L=L.concat(H.slice(nh).concat(Ez.slice(ne)).slice(0,T-L.length))}else L=sh(A).slice(0,T);
- P=L;tiles=sh(L.slice()).map(q=>({q,done:0}));tg=tiles.length;const rw=Math.ceil(tg/5)||1;$('list').style.height=rw*7.5+'vh';$('list').style.gridTemplateRows='repeat('+rw+',minmax(0,1fr))';busy=false;streak=0;$('ovl').innerHTML='';pick(-1)}
+ P=L;tiles=sh(L.slice()).map(q=>({q,done:0}));tg=tiles.length;const rw=Math.ceil(tg/5)||1;$('list').style.height=rw*7.5+'vh';$('list').style.gridTemplateRows='repeat('+rw+',minmax(0,1fr))';busy=false;streak=0;TM.q={ms:0,on:true};$('ovl').innerHTML='';pick(-1)}
 function pick(i){cur=i;Q=i>=0?tiles[i].q:null;seq=[];buf=null;gbtn=[];solved=false;$('msg').innerHTML='';$('hint').textContent='';
  $('qn').innerHTML=Q?'請組出：<b>'+esc(Q.n)+'</b> <span class="bd">'+(Q.d=='難'?'進階':'基本')+'</span>':(tg?'👇 請先在下方選一個物質格子':'此範圍沒有題目，請老師新增');
  $('hintb').style.display=Q&&Q.h?'':'none';render()}
@@ -145,22 +149,55 @@ $('ok').onclick=()=>{if(need())return;
  const ex=Q.items;if(seq.length==ex.length&&seq.every((x,i)=>x.t==ex[i].t&&x.v==ex[i].v)){solved=busy=true;render();say('🎉 '+PR[Math.random()*PR.length|0],'good');streak++;fly(ex,Q,cur);return}
  const same=flat(seq).join()==flat(ex).join(),eg=ex.some(x=>x.t=='g'),sg=seq.some(x=>x.t=='g');
  say(same?(eg&&!sg?'原子團要加括號喔！':!eg&&sg?'只有一個原子團，不用括號':'原子團的個數不對'):'順序或個數不對，差一點點，再試一次！','bad');sfx([294,220],.16);streak=0;shake()};
-function fly(ex,q,i){const pt=$('pt').getBoundingClientRect(),sq=$('seq').getBoundingClientRect(),cx=pt.left+pt.width/2,ty=pt.top+20,at=flat(ex),n=at.length,st=Math.min(46,(sq.width-40)/n);
+function fly(ex,q,i,from,gm){const pt=$('pt').getBoundingClientRect(),sq=(from||$('seq')).getBoundingClientRect(),cx=pt.left+pt.width/2,ty=pt.top+20,at=flat(ex),n=at.length,st=Math.min(46,(sq.width-40)/n);
  const M=at.map((a,k)=>mini(a,sq.left+16+k*st,sq.top+sq.height/2-20));
  M.forEach(d=>{const r=d.getBoundingClientRect();d.animate([{transform:'translate(0,0) scale(1)'},{transform:'translate('+(cx-20-r.left)+'px,'+(ty+65-r.top)+'px) scale(.55)'}],{duration:650,easing:'ease-in',fill:'forwards'})});
  sfx([392,440,494],.1,'triangle',.08);
  setTimeout(()=>{M.forEach(d=>d.remove());
   const fx=document.createElement('div');fx.className='fx';fx.style.left=(cx-60)+'px';fx.style.top=(ty+5)+'px';document.body.appendChild(fx);fx.animate([{transform:'scale(.2)',opacity:1},{transform:'scale(4)',opacity:0}],{duration:450}).onfinish=()=>fx.remove();
   banner(q,ex,pt);
-  const el=document.createElement('div');el.className='nb fly';el.innerHTML='<div class="f">'+fh(ex)+'</div>'+esc(q.n)+'　分子量 '+mass(ex)+(q.e?'<div class="ex">'+esc(q.e)+'</div>':'');document.body.appendChild(el);
+  const el=document.createElement('div');el.className='nb fly';el.innerHTML='<div class="f">'+fh(ex)+'</div>'+esc(q.n)+'　'+(q.lab||'分子量')+' '+mass(ex)+(q.e?'<div class="ex">'+esc(q.e)+'</div>':'');document.body.appendChild(el);
   const w=el.offsetWidth,h=el.offsetHeight;el.style.left=(cx-w/2)+'px';el.style.top=ty+'px';
   confetti(cx,ty+h/2,45);sfx([523,659,784,1047],.12);
   ft('+'+mass(ex),cx+w/2+80,ty+h/2,'#ffb300','min(7vw,10vh)');if(streak>1){ft('×'+streak+' 連擊！',cx-w/2-100,ty+h/2,'#ff5722','min(5vw,8vh)');setTimeout(()=>sfx([880,1175,1397],.1),400)}
   setTimeout(()=>{const t=$('tile'+i).getBoundingClientRect();el.style.transition='transform .9s cubic-bezier(.5,0,.2,1),opacity .9s';
    el.style.transform='translate('+(t.left+t.width/2-cx)+'px,'+(t.top+t.height/2-ty-h/2)+'px) scale('+Math.min(t.width/w,t.height/h)+')';el.style.opacity='.5';
-   setTimeout(()=>{el.remove();tiles[i].done=1;busy=false;landI=i;pick(-1);const b=$('tile'+i).getBoundingClientRect();confetti(b.left+b.width/2,b.top+b.height/2,25);sfx([784,988],.1);if(tiles.every(x=>x.done))setTimeout(win,500)},950)},q.e?3600:2200)},650)}
-function win(){sfx([523,659,784,1047,784,1047,1319],.14);[0,500,1000].forEach(t=>setTimeout(()=>confetti(innerWidth*(.25+Math.random()*.5),innerHeight*.5,60),t));$('ovl').innerHTML='<div class="ov"><div class="box" style="text-align:center"><h1 style="font-size:44px">🎉 過關！</h1><p style="font-size:22px">你製造了 '+tg+' 種新物質</p><div id="wl" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;text-align:left"></div><button id="again" style="font-size:24px;padding:10px 24px">再玩一次</button></div></div>';
- tiles.forEach(t=>{const d=document.createElement('div');d.className='t';d.innerHTML='<b>'+fh(t.q.items)+'</b>'+esc(t.q.n);$('wl').appendChild(d)});$('again').onclick=run}
+   setTimeout(()=>{el.remove();if(gm)gLand(i);else{tiles[i].done=1;busy=false;landI=i;pick(-1)}const b=$('tile'+i).getBoundingClientRect();confetti(b.left+b.width/2,b.top+b.height/2,25);sfx([784,988],.1);if(gm?GT.every(x=>x.done):tiles.every(x=>x.done))setTimeout(()=>win(gm?'g':'q'),500)},950)},q.e?3600:2200)},650)}
+function win(kind){kind=kind||'q';TM[kind].on=false;const ms=TM[kind].ms,list=kind=='g'?GT.map(t=>({h:t.el,n:EL[t.el].zh})):tiles.map(t=>({h:fh(t.q.items),n:t.q.n}));
+ sfx([523,659,784,1047,784,1047,1319],.14);[0,500,1000].forEach(t=>setTimeout(()=>confetti(innerWidth*(.25+Math.random()*.5),innerHeight*.5,60),t));
+ $('ovl').innerHTML='<div class="ov"><div class="box" style="text-align:center"><h1 style="font-size:44px;margin:.2em 0">🎉 過關！</h1><p style="font-size:24px;margin:.2em">'+(kind=='g'?'認識了 ':'製造了 ')+list.length+(kind=='g'?' 個元素':' 種新物質')+'　⏱ 用時 <b>'+(ms/1000).toFixed(1)+'</b> 秒</p><div id="rk" style="font-size:20px;min-height:2.6em;margin:.3em 0"></div><div id="wl" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;text-align:left"></div><button id="again" style="font-size:24px;padding:10px 24px">再玩一次</button></div></div>';
+ list.forEach(t=>{const d=document.createElement('div');d.className='t';d.innerHTML='<b>'+t.h+'</b>'+esc(t.n);$('wl').appendChild(d)});$('again').onclick=()=>kind=='g'?gStart():run();submitScore(kind,ms,$('rk'))}
+// ---- 元素挑戰、計時、排行榜 ----
+const TM={q:{ms:0,on:true},g:{ms:0,on:false}};let tLast=performance.now();
+setInterval(()=>{const n=performance.now(),dt=Math.min(n-tLast,300);tLast=n;const t=TM[MODE];if(t&&t.on&&!busy&&!$('ovl').innerHTML&&!document.hidden)t.ms+=dt;$('tv').textContent=t?(t.ms/1000).toFixed(1):'0.0'},100);
+let GT=null,GC=-1,GAS='',NICK='',SKIP=false;try{NICK=localStorage.getItem('chemNick')||''}catch(e){}
+const FLD=[['d','簡介'],['u','生活用途'],['f','小知識']];
+function mask(sym,t){const e=EL[sym],i=getInfo(sym),w=[sym=='Au'?'金(?!屬)':e.zh];if(i.en)w.push(i.en);if(sym=='W')w.push('Wolfram');t=t.replace(new RegExp(w.join('|'),'gi'),'？');return t.replace(new RegExp(sym.length>1?sym:'(?<![A-Za-z])'+sym+'(?![a-z])','g'),'？')}
+function gStart(){const pool=KS.filter(k=>FLD.filter(f=>getInfo(k)[f[0]]).length>=2),n=Math.min(D.n||10,pool.length);pool.sort(()=>Math.random()-.5);
+ GT=pool.slice(0,n).map(k=>{const i=getInfo(k),fs=FLD.filter(f=>i[f[0]]).sort(()=>Math.random()-.5).slice(0,2);return{el:k,clues:fs.map(f=>[f[1],mask(k,i[f[0]])]),done:0}});
+ TM.g={ms:0,on:true};streak=0;busy=false;$('ovl').innerHTML='';GC=GT.findIndex(t=>!t.done);gShow();gRender()}
+function gShow(){const t=GT&&GT[GC];$('gq').innerHTML=t?'<div class="gh">🎯 這是哪個元素？<small>（第 '+(GT.filter(x=>x.done).length+1)+'／'+GT.length+' 題）</small></div>'+t.clues.map(c=>'<div class="gc"><b>'+c[0]+'</b><p>'+esc(c[1])+'</p></div>').join('')+'<div id="gmsg"></div><div style="font-size:.85em;color:#666">請點週期表上的元素作答</div>':'<div class="gh">🎉 全部完成！</div>'}
+function gRender(){$('cnt').textContent=GT.filter(t=>t.done).length;$('tg').textContent=GT.length;const L=$('list'),rw=Math.ceil(GT.length/5)||1;L.style.height=rw*7.5+'vh';L.style.gridTemplateRows='repeat('+rw+',minmax(0,1fr))';L.innerHTML='';
+ GT.forEach((t,i)=>{const d=document.createElement('div');d.id='tile'+i;d.className='tile'+(t.done?' done':'')+(i==landI?' land':'');d.style.cursor='default';d.innerHTML=t.done?'<b>'+t.el+'</b>'+EL[t.el].zh:'？';L.appendChild(d)});landI=-1}
+function gLand(i){GT[i].done=1;busy=false;landI=i;GC=GT.findIndex(t=>!t.done);gShow();gRender()}
+function gAnswer(s){if(busy||!GT||GC<0)return;const t=GT[GC];
+ if(s==t.el){busy=true;streak++;$('gmsg').innerHTML='<span class="good">🎉 答對了！</span>';fly([{t:'a',v:s}],{n:EL[s].zh,e:'',lab:'原子量'},GC,BT[s],true)}
+ else{streak=0;sfx([294,220],.16);const c=$('gq');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');$('gmsg').innerHTML='<span class="bad">不是喔，再想想！加油！</span>';const b=BT[s];b.classList.remove('wrong');void b.offsetWidth;b.classList.add('wrong')}}
+// 暱稱與排行榜（Google Apps Script）
+function whoRender(){$('who').innerHTML=GAS?(NICK?'👤 '+esc(NICK)+' <button id="chn">換暱稱</button>':'（未登錄，成績不上傳）<button id="chn">登錄</button>'):'';if($('chn'))$('chn').onclick=login}
+function login(){$('ovl').innerHTML='<div class="ov"><div class="box" style="text-align:center"><h2 style="margin:.2em">🏆 輸入暱稱</h2><p>成績會上傳到排行榜。請使用暱稱，不要用真實姓名。</p><input id="nk" maxlength="12" style="font-size:24px;width:80%" value="'+esc(NICK)+'" placeholder="最多 12 個字"><br><button id="nko" style="font-size:22px;padding:8px 24px">開始</button><button id="nks" style="font-size:18px">先不登錄，直接練習</button></div></div>';
+ $('nko').onclick=()=>{const v=$('nk').value.replace(/[\u0000-\u001f]/g,'').trim().replace(/^[=+\-@]+/,'').slice(0,12);if(!v)return;NICK=v;try{localStorage.setItem('chemNick',v)}catch(e){}$('ovl').innerHTML='';whoRender()};
+ $('nks').onclick=()=>{NICK='';SKIP=true;try{localStorage.removeItem('chemNick')}catch(e){}$('ovl').innerHTML='';whoRender()}}
+const rankHtml=j=>{const f=(k,l)=>j.rank&&j.rank[k]?l+'第 <b>'+j.rank[k]+'</b> 名／'+j.n[k]+' 人':'';return '🏆 '+[f('all','總榜'),f('q','化學式榜'),f('g','認識元素榜')].filter(Boolean).join('　')+'<br><small>你的平均：'+(j.avg/1000).toFixed(1)+' 秒／次（累積 '+j.count+' 次）</small>'};
+async function submitScore(kind,ms,box){if(!GAS){box.textContent='';return}if(!NICK){box.textContent='（未登錄暱稱，成績不會上傳）';return}box.textContent='成績上傳中…';
+ try{const r=await fetch(GAS,{method:'POST',body:JSON.stringify({action:'submit',nick:NICK,kind,ms:Math.round(ms)})}),j=await r.json();if(!j.ok)throw j.err;box.innerHTML=rankHtml(j)}catch(e){box.textContent='成績上傳失敗（'+e+'），請檢查網路後再試'}}
+async function showBoard(tab){tab=tab||'all';$('ovl').innerHTML='<div class="ov"><div class="box" id="bx">載入中…</div></div>';
+ try{const r=await fetch(GAS+(GAS.includes('?')?'&':'?')+'action=board',{cache:'no-store'}),j=await r.json();if(!j.ok)throw j.err;drawBoard(j,tab)}catch(e){$('bx').innerHTML='讀取排行榜失敗（'+esc(e)+'）<br><button onclick="$(\'ovl\').innerHTML=\'\'">關閉</button>'}}
+function drawBoard(j,tab){const fm=ms=>(ms/1000).toFixed(1),cell=(T,N)=>N?fm(T)+' 秒／'+N+' 次':'—',rows=(j[tab]||[]).slice(0,30);
+ const head={all:'<th>化學式（累積／次數）</th><th>認識元素（累積／次數）</th><th>平均（秒／次）</th>',q:'<th>累積時間／次數</th><th>平均（秒／次）</th>',g:'<th>累積時間／次數</th><th>平均（秒／次）</th>'}[tab];
+ const body=rows.map((p,i)=>'<tr'+(p.nick==NICK?' class="me"':'')+'><td>'+(i+1)+'</td><td>'+esc(p.nick)+'</td>'+(tab=='all'?'<td>'+cell(p.qT,p.qN)+'</td><td>'+cell(p.gT,p.gN)+'</td><td>'+fm((p.qT+p.gT)/(p.qN+p.gN))+'</td>':tab=='q'?'<td>'+cell(p.qT,p.qN)+'</td><td>'+fm(p.qT/p.qN)+'</td>':'<td>'+cell(p.gT,p.gN)+'</td><td>'+fm(p.gT/p.gN)+'</td>')+'</tr>').join('');
+ $('bx').innerHTML='<h2 style="margin:.2em 0">🏆 排行榜</h2><div class="tabs">'+[['all','總榜'],['q','化學式'],['g','認識元素']].map(a=>'<button data-t="'+a[0]+'"'+(a[0]==tab?' class="on"':'')+'>'+a[1]+'</button>').join('')+'<button id="bre">重新整理</button><button id="bcl" style="float:right">關閉</button></div><p style="margin:.3em;color:#555;font-size:15px">'+(tab=='all'?'排序：（化學式＋認識元素）累積時間 ÷ 挑戰次數，越小越前面':'排序：累積時間 ÷ 挑戰次數，越小越前面')+'</p><table><tr><th>名次</th><th>暱稱</th>'+head+'</tr>'+(body||'<tr><td colspan="5">還沒有成績</td></tr>')+'</table>';
+ $('bx').querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>drawBoard(j,b.dataset.t));$('bre').onclick=()=>showBoard(tab);$('bcl').onclick=()=>{$('ovl').innerHTML=''}}
 // ---- Excel ----
 const CT=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
 const crc=u=>{let c=-1;for(const b of u)c=CT[(c^b)&255]^(c>>>8);return(c^-1)>>>0};
@@ -256,8 +293,9 @@ async function imgSet(k,v){try{const d=await idb();await new Promise(ok=>{const 
 const resize=f=>new Promise((ok,no)=>{const im=new Image(),u=URL.createObjectURL(f);im.onload=()=>{const m=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*m);c.height=Math.round(im.height*m);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(c.toDataURL('image/jpeg',.82))};im.onerror=no;im.src=u});
 // 模式切換
 let MODE='q';
-function setMode(m){MODE=m;$('pt').classList.toggle('em',m=='e');$('mQ').classList.toggle('on',m=='q');$('mE').classList.toggle('on',m=='e');$('qside').style.display=m=='q'?'':'none';$('eside').style.display=m=='e'?'':'none';$('list').style.display=m=='q'?'':'none'}
-$('mQ').onclick=()=>setMode('q');$('mE').onclick=()=>setMode('e');
+function setMode(m){if(busy)return;MODE=m;$('pt').classList.toggle('em',m=='e');['mQ','mE','mG'].forEach((id,i)=>$(id).classList.toggle('on','qeg'[i]==m));$('qside').style.display=m=='q'?'':'none';$('eside').style.display=m=='e'?'':'none';$('gside').style.display=m=='g'?'':'none';$('timer').style.display=m=='e'?'none':'';$('list').style.display=m=='e'?'none':'';
+ if(m=='g'){if(!GT)gStart();else{gRender();gShow()}}else if(m=='q')render()}
+$('mQ').onclick=()=>setMode('q');$('mE').onclick=()=>setMode('e');$('mG').onclick=()=>setMode('g');$('mB').onclick=()=>showBoard();
 // 全螢幕元素介紹
 const KS=Object.keys(EL);
 async function showEl(sym,back){const e=EL[sym],i=getInfo(sym),imgs=(i.im||[]).map(f=>BASE+'images/'+encodeURI(f)).concat(await imgGet(sym)),cn=cat(e.z),ix=e.z-1;
@@ -314,7 +352,9 @@ const BASE='';let REMOTE='';
 async function loadRemote(){let q=0,e=0;const get=async n=>{const r=await fetch(BASE+encodeURI(n),{cache:'no-cache'});if(!r.ok)throw 0;return readRows({name:n,arrayBuffer:()=>r.arrayBuffer()})};
  try{const x=rowsToBank(await get('題庫.xlsx'));if(x.add.length){D.bank=x.add;q=x.add.length}}catch(x){}
  try{const m=rowsToEl(await get('元素介紹.xlsx'));if(m.n){EO=m.map;e=m.n}}catch(x){}
- if(q||e){REMOTE='題庫 '+q+' 題、元素介紹 '+e+' 個';markStars();if(MODE=='q'&&!tiles.some(t=>t.done)&&!busy)run()}}
+ if(q||e){REMOTE='題庫 '+q+' 題、元素介紹 '+e+' 個';markStars();if(MODE=='q'&&!tiles.some(t=>t.done)&&!busy)run()}
+ try{const r=await fetch(BASE+'config.json',{cache:'no-cache'});if(r.ok){const c=await r.json();if(c&&c.gas)GAS=c.gas}}catch(x){}
+ $('mB').style.display=GAS?'':'none';whoRender();if(GAS&&!NICK&&!SKIP&&!$('ovl').innerHTML)login()}
 markStars();
 function fitTiles(){const R=document.documentElement.style;let k=1.3;R.setProperty('--k',k);for(let n=0;n<4;n++){let w=0;document.querySelectorAll('#pt .el:not(.demo)').forEach(e=>{const r1=e.querySelector('.r1'),bb=r1.querySelector('b');bb.style.marginLeft='';bb.style.marginLeft=(-.2*bb.offsetWidth)+'px';const need=r1.children[0].getBoundingClientRect().width+r1.children[1].getBoundingClientRect().width,have=e.clientWidth-parseFloat(getComputedStyle(e).paddingLeft)*2;w=Math.max(w,need/have)});if(w<=1)break;k=Math.max(1,k/w*.98);R.setProperty('--k',k)}}
 addEventListener('resize',fitTiles);fitTiles();
