@@ -62,6 +62,7 @@ table{border-collapse:collapse;width:100%;font-size:14px}td{border-bottom:1px so
 #gq{font-size:min(2.5vh,1.25vw);line-height:1.5}.gh{font-weight:700;font-size:1.15em;color:#27408b;margin-bottom:.3em}.gh small{font-weight:400;color:#666}.gc{margin:.5em 0;padding:.3em .6em;background:#f6f8ff;border-left:4px solid #27408b;border-radius:4px}.gc b{color:#27408b}.gc p{margin:0}
 .el.wrong{animation:wr .45s}@keyframes wr{50%{background:#ff8a80}}
 #ovl table{border-collapse:collapse;width:100%;font-size:18px}#ovl th,#ovl td{border-bottom:1px solid #ddd;padding:5px 8px;text-align:left}#ovl tr.me td{background:#fff4c2;font-weight:700}.tabs button{font-size:18px;padding:5px 16px}.tabs button.on{background:#27408b;color:#fff}
+.startbtn{font-size:min(4vh,2.2vw);padding:.5em 1.6em;border-radius:14px;border:0;background:#2e7d32;color:#fff;font-weight:700;display:block;margin:.3em auto}.sth{text-align:center;color:#666;font-size:min(2vh,1.1vw)}
 </style></head><body>
 <header><h1>⚗️ 化學式組合：依化學式順序點元素</h1><span id="modes"><button id="mQ" class="on">⚗️ 組合分子</button><button id="mE">🔬 元素認識</button><button id="mG">🎯 元素挑戰</button><button id="mB" style="display:none">🏆 排行榜</button></span><span>成就 <b id="cnt">0</b>/<b id="tg">10</b> <button id="snd" title="音效">🔊</button> <button id="tb" title="老師">⚙</button></span></header>
 <div id="wrap"><div><div id="pt"></div><div id="list"></div></div><aside><div id="qside">
@@ -111,7 +112,8 @@ function confetti(x,y,n){const C=['#ff5252','#ffca28','#66bb6a','#42a5f5','#ab47
 const shake=()=>{const s=$('seq');s.classList.remove('shake');void s.offsetWidth;s.classList.add('shake')};
 const PR=['太棒了！新物質誕生！','答對了，你好厲害！','化學小天才！','完美！繼續加油！'];
 $('help').onclick=()=>{$('ovl').innerHTML=`<div class="ov" onclick="$('ovl').innerHTML=''"><div class="box" style="font-size:min(3.3vh,2.1vw);line-height:1.55;max-width:min(1100px,94vw)"><h2 style="margin:0 0 .3em;font-size:1.3em">🎮 遊戲說明</h2>
-<ol style="margin:0;padding-left:1.4em"><li><b>選題</b>：點下方一個物質格子。</li>
+<ol style="margin:0;padding-left:1.4em"><li><b>開始</b>：按「▶ 開始」，題目才會出現，同時開始計時。</li>
+<li><b>選題</b>：點下方一個物質格子。</li>
 <li><b>點元素</b>：依化學式由左到右點週期表的元素，幾個原子就點幾次。例如水 H<sub>2</sub>O，要點 H、H、O。</li>
 <li><b>原子團</b>：遇到括號，先按「（」，點出原子團裡的原子，再按「）」。做好的原子團會自動放進化學式，需要幾個，就再按粉紅色按鈕。例如 Ca(OH)<sub>2</sub>，先做一個 OH，再按一次粉紅色的 OH。</li>
 <li><b>確認</b>：按「確認」。答對，新物質會飛進格子；答錯可以再試。</li>
@@ -121,16 +123,17 @@ $('help').onclick=()=>{$('ovl').innerHTML=`<div class="ov" onclick="$('ovl').inn
 function info(q){$('ovl').innerHTML=`<div class="ov" onclick="$('ovl').innerHTML=''"><div class="box" style="text-align:center"><div class="nb" style="animation:none;font-size:22px"><div class="f">${fh(q.items)}</div>${esc(q.n)}　分子量 ${mass(q.items)}</div><p style="font-size:22px">${esc(q.e||'')}</p><small>點一下關閉</small></div></div>`}
 function run(){const A=pool(),T=Math.max(1,D.n||10),sh=a=>a.sort(()=>Math.random()-.5);let L;
  if(D.range=='all'){const H=sh(A.filter(q=>q.d=='難')),Ez=sh(A.filter(q=>q.d!='難')),nh=Math.min(D.nh,H.length,T),ne=Math.min(T-nh,Ez.length);L=H.slice(0,nh).concat(Ez.slice(0,ne));L=L.concat(H.slice(nh).concat(Ez.slice(ne)).slice(0,T-L.length))}else L=sh(A).slice(0,T);
- P=L;tiles=sh(L.slice()).map(q=>({q,done:0}));tg=tiles.length;const rw=Math.ceil(tg/5)||1;$('list').style.height=rw*7.5+'vh';$('list').style.gridTemplateRows='repeat('+rw+',minmax(0,1fr))';busy=false;streak=0;TM.q={ms:0,on:true};$('ovl').innerHTML='';pick(-1)}
+ P=L;tiles=sh(L.slice()).map(q=>({q,done:0}));tg=tiles.length;const rw=Math.ceil(tg/5)||1;$('list').style.height=rw*7.5+'vh';$('list').style.gridTemplateRows='repeat('+rw+',minmax(0,1fr))';busy=false;streak=0;TM.q={ms:0,on:false};ST.q=false;$('ovl').innerHTML='';pick(-1)}
 function pick(i){cur=i;Q=i>=0?tiles[i].q:null;seq=[];buf=null;gbtn=[];solved=false;$('msg').innerHTML='';$('hint').textContent='';
- $('qn').innerHTML=Q?'請組出：<b>'+esc(Q.n)+'</b> <span class="bd">'+(Q.d=='難'?'進階':'基本')+'</span>':(tg?'👇 請先在下方選一個物質格子':'此範圍沒有題目，請老師新增');
+ $('qn').innerHTML=!ST.q&&tg?'<button id="stq" class="startbtn">▶ 開始</button><div class="sth">按下「開始」後，題目才會出現，同時開始計時</div>':Q?'請組出：<b>'+esc(Q.n)+'</b> <span class="bd">'+(Q.d=='難'?'進階':'基本')+'</span>':(tg?'👇 請先在下方選一個物質格子':'此範圍沒有題目，請老師新增');
+ if(!ST.q&&tg)$('stq').onclick=()=>{ST.q=true;TM.q.on=true;sfx([523,784],.1);pick(-1)};
  $('hintb').style.display=Q&&Q.h?'':'none';render()}
 function render(){let h=fh(seq);if(buf)h+='<span class="op">(</span>'+fh(buf.map(v=>({t:'a',v})));$('seq').innerHTML=h||'<span class="ph0">依化學式順序，點選元素…</span>';
  $('gb').innerHTML='';gbtn.forEach(k=>{const b=document.createElement('button');b.innerHTML=gh(k);if(k==newG)b.className='new';b.onclick=()=>{if(busy||solved)return;seq.push({t:'g',v:k});render()};$('gb').appendChild(b)});newG=null;
  $('cnt').textContent=tiles.filter(t=>t.done).length;$('tg').textContent=tg;
- const L=$('list');L.innerHTML='';tiles.forEach((t,i)=>{const d=document.createElement('div');d.id='tile'+i;d.className='tile'+(t.done?' done':'')+(i==cur?' sel':'')+(i==landI?' land':'');d.innerHTML=t.done?'<b>'+fh(t.q.items)+'</b>'+esc(t.q.n):esc(t.q.n);d.onclick=()=>{if(busy)return;if(t.done)info(t.q);else{sfx([700],.06,'triangle',.08);pick(i)}};L.appendChild(d)});landI=-1}
+ const L=$('list');L.innerHTML='';tiles.forEach((t,i)=>{const d=document.createElement('div');d.id='tile'+i;d.className='tile'+(t.done?' done':'')+(i==cur?' sel':'')+(i==landI?' land':'');d.innerHTML=t.done?'<b>'+fh(t.q.items)+'</b>'+esc(t.q.n):(ST.q?esc(t.q.n):'？');d.onclick=()=>{if(busy||(!ST.q&&!t.done))return;if(t.done)info(t.q);else{sfx([700],.06,'triangle',.08);pick(i)}};L.appendChild(d)});landI=-1}
 const say=(t,c)=>{$('msg').innerHTML='<span class="'+c+'">'+t+'</span>'};
-const need=()=>{if(busy||solved)return 1;if(!Q){say('請先在下方選一個物質格子','bad');return 1}};
+const need=()=>{if(busy||solved)return 1;if(!ST.q){say('請先按「▶ 開始」','bad');return 1}if(!Q){say('請先在下方選一個物質格子','bad');return 1}};
 function mini(t,x,y){const d=document.createElement('div');d.className='mini';d.textContent=t;d.style.left=x+'px';d.style.top=y+'px';document.body.appendChild(d);return d}
 function ft(t,x,y,c,sz){const d=document.createElement('div');d.className='fl';d.textContent=t;d.style.cssText='left:'+x+'px;top:'+y+'px;color:'+c+';font-size:'+sz;document.body.appendChild(d);d.animate([{transform:'translate(-50%,0) scale(.5)',opacity:0},{transform:'translate(-50%,-30px) scale(1.2)',opacity:1,offset:.25},{transform:'translate(-50%,-100px) scale(1)',opacity:0}],{duration:1500,easing:'ease-out'}).onfinish=()=>d.remove()}
 function banner(q,ex,pt){const c=Math.random()<.5?'#ff2d55':'#1e90ff',b=document.createElement('div'),T='translateX(-50%) ';b.className='bnr';b.innerHTML='<span>'+esc(q.n)+'</span><small>'+fh(ex)+'</small>';b.style.cssText='left:'+(pt.left+pt.width/2)+'px;top:'+(pt.top+pt.height*.36)+'px;color:'+c+';text-shadow:0 0 12px '+c+',0 0 28px '+c;document.body.appendChild(b);
@@ -168,19 +171,21 @@ function win(kind){kind=kind||'q';TM[kind].on=false;const ms=TM[kind].ms,list=ki
  $('ovl').innerHTML='<div class="ov"><div class="box" style="text-align:center"><h1 style="font-size:44px;margin:.2em 0">🎉 過關！</h1><p style="font-size:24px;margin:.2em">'+(kind=='g'?'認識了 ':'製造了 ')+list.length+(kind=='g'?' 個元素':' 種新物質')+'　⏱ 用時 <b>'+(ms/1000).toFixed(1)+'</b> 秒</p><div id="rk" style="font-size:20px;min-height:2.6em;margin:.3em 0"></div><div id="wl" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;text-align:left"></div><button id="again" style="font-size:24px;padding:10px 24px">再玩一次</button></div></div>';
  list.forEach(t=>{const d=document.createElement('div');d.className='t';d.innerHTML='<b>'+t.h+'</b>'+esc(t.n);$('wl').appendChild(d)});$('again').onclick=()=>kind=='g'?gStart():run();submitScore(kind,ms,$('rk'))}
 // ---- 元素挑戰、計時、排行榜 ----
-const TM={q:{ms:0,on:true},g:{ms:0,on:false}};let tLast=performance.now();
+const TM={q:{ms:0,on:false},g:{ms:0,on:false}},ST={q:false,g:false};let tLast=performance.now();
 setInterval(()=>{const n=performance.now(),dt=Math.min(n-tLast,300);tLast=n;const t=TM[MODE];if(t&&t.on&&!busy&&!$('ovl').innerHTML&&!document.hidden)t.ms+=dt;$('tv').textContent=t?(t.ms/1000).toFixed(1):'0.0'},100);
 let GT=null,GC=-1,GAS='',NICK='',SKIP=false;try{NICK=localStorage.getItem('chemNick')||''}catch(e){}
 const FLD=[['d','簡介'],['u','生活用途'],['f','小知識']];
 function mask(sym,t){const e=EL[sym],i=getInfo(sym),w=[sym=='Au'?'金(?!屬)':e.zh];if(i.en)w.push(i.en);if(sym=='W')w.push('Wolfram');t=t.replace(new RegExp(w.join('|'),'gi'),'？');return t.replace(new RegExp(sym.length>1?sym:'(?<![A-Za-z])'+sym+'(?![a-z])','g'),'？')}
 function gStart(){const pool=KS.filter(k=>FLD.filter(f=>getInfo(k)[f[0]]).length>=2),n=Math.min(D.n||10,pool.length);pool.sort(()=>Math.random()-.5);
  GT=pool.slice(0,n).map(k=>{const i=getInfo(k),fs=FLD.filter(f=>i[f[0]]).sort(()=>Math.random()-.5).slice(0,2);return{el:k,clues:fs.map(f=>[f[1],mask(k,i[f[0]])]),done:0}});
- TM.g={ms:0,on:true};streak=0;busy=false;$('ovl').innerHTML='';GC=GT.findIndex(t=>!t.done);gShow();gRender()}
-function gShow(){const t=GT&&GT[GC];$('gq').innerHTML=t?'<div class="gh">🎯 這是哪個元素？<small>（第 '+(GT.filter(x=>x.done).length+1)+'／'+GT.length+' 題）</small></div>'+t.clues.map(c=>'<div class="gc"><b>'+c[0]+'</b><p>'+esc(c[1])+'</p></div>').join('')+'<div id="gmsg"></div><div style="font-size:.85em;color:#666">請點週期表上的元素作答</div>':'<div class="gh">🎉 全部完成！</div>'}
+ TM.g={ms:0,on:false};ST.g=false;streak=0;busy=false;$('ovl').innerHTML='';GC=GT.findIndex(t=>!t.done);gShow();gRender()}
+function gShow(){const t=GT&&GT[GC];
+ $('gq').innerHTML=!ST.g?'<div class="gh">🎯 元素挑戰</div><button id="stg" class="startbtn">▶ 開始</button><div class="sth">按下「開始」後，線索才會出現，同時開始計時</div>':t?'<div class="gh">🎯 這是哪個元素？<small>（第 '+(GT.filter(x=>x.done).length+1)+'／'+GT.length+' 題）</small></div>'+t.clues.map(c=>'<div class="gc"><b>'+c[0]+'</b><p>'+esc(c[1])+'</p></div>').join('')+'<div id="gmsg"></div><div style="font-size:.85em;color:#666">請點週期表上的元素作答</div>':'<div class="gh">🎉 全部完成！</div>';
+ if(!ST.g&&$('stg'))$('stg').onclick=()=>{ST.g=true;TM.g.on=true;sfx([523,784],.1);gShow()}}
 function gRender(){$('cnt').textContent=GT.filter(t=>t.done).length;$('tg').textContent=GT.length;const L=$('list'),rw=Math.ceil(GT.length/5)||1;L.style.height=rw*7.5+'vh';L.style.gridTemplateRows='repeat('+rw+',minmax(0,1fr))';L.innerHTML='';
  GT.forEach((t,i)=>{const d=document.createElement('div');d.id='tile'+i;d.className='tile'+(t.done?' done':'')+(i==landI?' land':'');d.style.cursor='default';d.innerHTML=t.done?'<b>'+t.el+'</b>'+EL[t.el].zh:'？';L.appendChild(d)});landI=-1}
 function gLand(i){GT[i].done=1;busy=false;landI=i;GC=GT.findIndex(t=>!t.done);gShow();gRender()}
-function gAnswer(s){if(busy||!GT||GC<0)return;const t=GT[GC];
+function gAnswer(s){if(busy||!GT||GC<0||!ST.g)return;const t=GT[GC];
  if(s==t.el){busy=true;streak++;$('gmsg').innerHTML='<span class="good">🎉 答對了！</span>';fly([{t:'a',v:s}],{n:EL[s].zh,e:'',lab:'原子量'},GC,BT[s],true)}
  else{streak=0;sfx([294,220],.16);const c=$('gq');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');$('gmsg').innerHTML='<span class="bad">不是喔，再想想！加油！</span>';const b=BT[s];b.classList.remove('wrong');void b.offsetWidth;b.classList.add('wrong')}}
 // 暱稱與排行榜（Google Apps Script）
@@ -352,7 +357,7 @@ const BASE='';let REMOTE='';
 async function loadRemote(){let q=0,e=0;const get=async n=>{const r=await fetch(BASE+encodeURI(n),{cache:'no-cache'});if(!r.ok)throw 0;return readRows({name:n,arrayBuffer:()=>r.arrayBuffer()})};
  try{const x=rowsToBank(await get('題庫.xlsx'));if(x.add.length){D.bank=x.add;q=x.add.length}}catch(x){}
  try{const m=rowsToEl(await get('元素介紹.xlsx'));if(m.n){EO=m.map;e=m.n}}catch(x){}
- if(q||e){REMOTE='題庫 '+q+' 題、元素介紹 '+e+' 個';markStars();if(MODE=='q'&&!tiles.some(t=>t.done)&&!busy)run()}
+ if(q||e){REMOTE='題庫 '+q+' 題、元素介紹 '+e+' 個';markStars();if(MODE=='q'&&!ST.q&&!tiles.some(t=>t.done)&&!busy)run()}
  try{const r=await fetch(BASE+'config.json',{cache:'no-cache'});if(r.ok){const c=await r.json();if(c&&c.gas)GAS=c.gas}}catch(x){}
  $('mB').style.display=GAS?'':'none';whoRender();if(GAS&&!NICK&&!SKIP&&!$('ovl').innerHTML)login()}
 markStars();
